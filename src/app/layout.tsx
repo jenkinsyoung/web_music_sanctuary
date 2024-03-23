@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className} style={{backgroundImage: 'url(/background.svg)'}}>
-      <main className="flex min-h-screen flex-col items-center">
+      <main>
       <Header />
       {children}
       <Footer />
