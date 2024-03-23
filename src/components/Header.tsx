@@ -2,8 +2,12 @@ import React from 'react'
 import styles from './Header.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
+import {getCurrentDateAndYear, getDayName, getMonthName} from '@/utils/Datetime'
 
 const Header = () => {
+    const date = getCurrentDateAndYear()
+    const month = getMonthName()
+    const day = getDayName()
   return (
     <div className={styles.container}>
         <div className={styles.header}>
@@ -18,7 +22,7 @@ const Header = () => {
             </div>
             <div className={styles.title_wrapper}>
                 <div className={styles.today}>
-                    {}
+                    {day}, {month} {date.day}, {date.year}
                 </div>
                 <h1>music sanctuary</h1>
                 <h3>The best music store</h3>
@@ -29,10 +33,18 @@ const Header = () => {
             
         </div>
         <div className={styles.navbar}>
+            <div className={styles.link}>
             <Link href='#'>about</Link>
+            </div>
+            <div className={styles.link}>
             <Link href='#'>products</Link>
+            </div>
+            <div className={styles.link}>
             <Link href='#'>your advertisement</Link>
+            </div>
+            <div className={styles.link}>
             <Link href='#'>your profile</Link>
+            </div>
         </div>
     </div>
   )
