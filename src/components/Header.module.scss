@@ -21,12 +21,10 @@
             grid-column: 1/2;
             align-items: center;
             >.logo_img{
-                padding: 10px;
+                padding:0 10px;
                 margin:auto;
                 margin-top: 8px;
-                width: 209px;
-                height: 209px;
-                background-size: cover;
+                padding-bottom: 8px;
             }
         }
 
@@ -55,7 +53,7 @@
             }
             >h3{
                 height: 44.08px;
-                margin-top: 20px;
+                margin-top: 19px;
                 align-items: center;
                 font-size: 26.19px;
                 font-weight: 700;
@@ -96,6 +94,10 @@
             text-align: center;
             text-transform: uppercase;
             padding-top: 15.77px;
+
+            &:hover{
+                color: rgba(99, 11, 131, 1.00)
+            }
         }
     }
 }

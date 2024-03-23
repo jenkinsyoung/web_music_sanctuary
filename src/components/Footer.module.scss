@@ -1,0 +1,53 @@
+.container{
+    width: 1676.88px;
+    height: 46.28px;
+    display: grid;
+    grid-template-columns: 5fr 4fr 3fr;
+    box-shadow: inset 0px 0px 0px 1px rgb(35, 31, 32),0px 0px 0px 1px rgb(35, 31, 32);
+    background: rgba(255, 255, 255, 0);
+    >.letter_c{
+        box-shadow: inset 0px 0px 0px 1px rgb(35, 31, 32),0px 0px 0px 1px rgb(35, 31, 32);
+        background: rgba(255, 255, 255, 0);
+        height: 100%;
+        align-items: center;
+        font-size: 16.73px;
+        font-weight: 400;
+        line-height: 18.29px;
+        text-align: center;
+        padding: 14px 0;
+    }
+
+    >.contacts{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        box-shadow: inset 0px 0px 0px 1px rgb(35, 31, 32),0px 0px 0px 1px rgb(35, 31, 32);
+        background: rgba(255, 255, 255, 0);
+
+        >div.phone, div.email{
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            gap: 22px;
+
+            >h2{
+                font-size: 18px;
+                font-weight: 700;
+                line-height: 27.43px;
+                text-align: left;
+                text-transform: uppercase;
+            }
+            >a, p{
+                font-size: 20px;
+                font-weight: 400;
+                line-height: 29.39px;
+                text-align: left;
+                text-transform: uppercase;
+            }
+
+            >a:hover{
+                color: rgba(99, 11, 131, 1.00)
+            }
+        }
+
+    }
+}
