@@ -55,7 +55,12 @@ const HomePage = () => {
           <li>United community from all over the country</li>
           <li>No additional fees</li>
           <li>Free use for everyone</li>
-          Image
+          <Image priority
+            src='/music_girl.svg'
+            alt=''
+            width={559}
+            height={503}
+          />
         </div>
         <div className={styles.ai_add}>
         <h1>ai & music</h1>
