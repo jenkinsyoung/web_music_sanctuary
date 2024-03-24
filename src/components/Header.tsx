@@ -13,11 +13,11 @@ const Header = () => {
         <div className={styles.header}>
             <div className={styles.logo}>
                 <div className={styles.logo_img}>
-                    <Image 
+                    <Link href='#'><Image 
                     src='/electric-guitar.svg'
                     alt=''
                     width={209}
-                    height={209} />
+                    height={209} /></Link>
                 </div>
             </div>
             <div className={styles.title_wrapper}>
@@ -34,7 +34,7 @@ const Header = () => {
         </div>
         <div className={styles.navbar}>
             <div className={styles.link}>
-            <Link href='#'>about</Link>
+            <Link href='/'>about</Link>
             </div>
             <div className={styles.link}>
             <Link href='#'>products</Link>
