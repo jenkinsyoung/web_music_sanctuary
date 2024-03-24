@@ -1,4 +1,5 @@
 .container{
+    user-select: none;
     position: relative;
     max-width: 1676.88px;
     height: 284.41px;
@@ -20,11 +21,16 @@
             background: rgba(255, 255, 255, 0);
             grid-column: 1/2;
             align-items: center;
+            &:hover .logo_img{
+                filter: grayscale(0);
+            }
             >.logo_img{
                 padding:0 10px;
                 margin:auto;
                 margin-top: 8px;
                 padding-bottom: 8px;
+                filter: grayscale(1);
+                transition: 0.7s;
             }
         }
 

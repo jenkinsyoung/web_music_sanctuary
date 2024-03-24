@@ -1,4 +1,6 @@
+"use client"
 import styles from './HopePage.module.scss';
+import Image from 'next/image';
 
 const HomePage = () => {
   return (
@@ -15,9 +17,62 @@ const HomePage = () => {
           <div className={styles.image}><div className={styles.img} style={{backgroundImage: 'url(/music_equipment.svg)'}}/></div>
         </div>
         <div className={styles.hotline}>
-          dd
+          <div className={styles.hotline_card}>
+            <div className={styles.image}>
+              <Image 
+              src='/phone.svg'
+              alt=''
+              width={266.97}
+              height={189.83}/>
+            </div>
+            <h2>The Hotline</h2>
+            <div className={styles.contacts}>
+              <h3>phone</h3>
+              <p>8 999 999 99 99</p>
+              <h3>email</h3>
+              <button>Click here</button>
+            </div>
+          </div>
         </div>
       </div>
+
+      <div className={styles.second_line}>
+        <div className={styles.story_add}>
+          <h1>music sanctuary STORY</h1>
+          <Image priority
+          src='/guitar.svg'
+          alt=''
+          width={427.1}
+          height={390.88}/>
+          <p>Music Sanctuary was developed with intent to help people sell and exchange their music gear faster. Our goal is to harvest the marvel of modern AI technologies to provide the best experience possible.</p>
+        </div>
+        <div className={styles.advantages_add}>
+          <h1>Why you should choose us</h1>
+          <h4>Advantages</h4>
+          <li>Quick listing generation based on the latest AI models</li>
+          <li>95% accuracy guitar model recognition</li>
+          <li>Trusted sellers and customers</li>
+          <li>United community from all over the country</li>
+          <li>No additional fees</li>
+          <li>Free use for everyone</li>
+          Image
+        </div>
+        <div className={styles.ai_add}>
+        <h1>ai & music</h1>
+        <Image priority
+          src='/ai-music.svg'
+          alt=''
+          width={475.28}
+          height={393.71}/>
+        <p>Use the latest advancements in the field of artificial intelligence to create the best gear shopping experience</p>
+        </div>
+        <h1 onClick={() => {window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });}}>Music Sanctuary</h1>
+      </div>
+      
     </div>
   );
 }
