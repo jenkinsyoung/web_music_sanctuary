@@ -11,21 +11,21 @@ const Links=[
       title: "products",
       path: "/products",
       w: 145.5,
-      h: 47,
+      h: 57.81,
     },
     {
       src: "/add-underline.svg",
       title: "your advertisements",
       path: "/advertisements",
-      w: 239,
-      h: 44,
+      w: 247,
+      h: 55,
     },
     {
-        src: "/products-underline.svg",
+        src: "/profile-underline.svg",
         title: "your profile",
         path: "/your_profile",
-        w: 112.5,
-        h: 8.5,
+        w: 165,
+        h: 48,
     }
   ];
 
@@ -70,7 +70,7 @@ const Header = () => {
             <NavLink item={Links[1]} />
             </div>
             <div className={styles.link}>
-            <Link href='#'>your profile</Link>
+            <NavLink item={Links[2]} />
             </div>
         </div>
     </div>
