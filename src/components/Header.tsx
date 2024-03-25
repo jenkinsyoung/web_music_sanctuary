@@ -13,7 +13,7 @@ const Header = () => {
         <div className={styles.header}>
             <div className={styles.logo}>
                 <div className={styles.logo_img}>
-                    <Link href='#'><Image 
+                    <Link href='/'><Image 
                     src='/electric-guitar.svg'
                     alt=''
                     width={209}

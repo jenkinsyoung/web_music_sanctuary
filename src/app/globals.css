@@ -7,7 +7,10 @@
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 }
-
+body{
+  opacity: 1;
+  transition: 0.5s;
+}
 main{
   max-width: 1676.88px;
   display: flex;
