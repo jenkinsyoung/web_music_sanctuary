@@ -3,6 +3,31 @@ import styles from './Header.module.scss'
 import Link from 'next/link'
 import Image from 'next/image'
 import {getCurrentDateAndYear, getDayName, getMonthName} from '@/utils/Datetime'
+import NavLink from './NavLink'
+
+const Links=[
+    {
+      src: "/products-underline.svg",
+      title: "products",
+      path: "/products",
+      w: 145.5,
+      h: 47,
+    },
+    {
+      src: "/add-underline.svg",
+      title: "your advertisements",
+      path: "/advertisements",
+      w: 239,
+      h: 44,
+    },
+    {
+        src: "/products-underline.svg",
+        title: "your profile",
+        path: "/your_profile",
+        w: 112.5,
+        h: 8.5,
+    }
+  ];
 
 const Header = () => {
     const date = getCurrentDateAndYear()
@@ -35,12 +60,14 @@ const Header = () => {
         <div className={styles.navbar}>
             <div className={styles.link}>
             <Link href='/'>about</Link>
+            
             </div>
             <div className={styles.link}>
-            <Link href='/products'>products</Link>
+            {/* <Link href='/products'>products</Link> */}
+            <NavLink item={Links[0]} />
             </div>
             <div className={styles.link}>
-            <Link href='#'>your advertisements</Link>
+            <NavLink item={Links[1]} />
             </div>
             <div className={styles.link}>
             <Link href='#'>your profile</Link>
