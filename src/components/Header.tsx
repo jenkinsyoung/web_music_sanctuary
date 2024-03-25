@@ -37,7 +37,7 @@ const Header = () => {
             <Link href='/'>about</Link>
             </div>
             <div className={styles.link}>
-            <Link href='#'>products</Link>
+            <Link href='/products'>products</Link>
             </div>
             <div className={styles.link}>
             <Link href='#'>your advertisements</Link>
