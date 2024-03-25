@@ -33,7 +33,7 @@ const ProductPage =()=>{
                         height={433}/> 
                 </div>
                 <div className={styles.classic}>
-                    <h1>electric guitar</h1>
+                    <h1>classical guitar</h1>
                     <Image priority
                     src = '/guitar.svg'
                     alt=''
