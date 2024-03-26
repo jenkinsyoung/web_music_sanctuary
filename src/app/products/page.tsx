@@ -1,3 +1,4 @@
+import Product from '@/ui/Product'
 import styles from './ProductPage.module.scss'
 import Image from 'next/image'
 

@@ -1,0 +1,48 @@
+.container{
+    width: 419.22px;
+    height: 500px;
+    box-shadow: inset 0px 0px 0px 1px rgb(35, 31, 32),0px 0px 0px 1px rgb(35, 31, 32);
+    background: rgba(255, 255, 255, 0);
+    >h1{
+        width: 100%;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-size: 25px;
+        font-weight: 700;
+        line-height: 45.71px;
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    >div.img{
+        position: relative;
+        width: 388px;
+        height: 307px;
+        border: 2px solid rgb(0, 0, 0);
+        border-radius: 2px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        margin: auto;
+        padding-bottom: 10px;
+    }
+    >p{
+        position: relative;
+        padding-top: 11px;
+        width: 388px;
+        height: 80px;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 22.86px;
+        margin: auto;
+        text-align: justify;
+    }
+    >button{
+        font-size: 16.58px;
+        font-weight: 400;
+        text-align: right;
+        text-transform: uppercase;
+        width: 388px;
+        margin: auto;
+    }
+}
