@@ -7,25 +7,25 @@ import NavLink from './NavLink'
 
 const Links=[
     {
-      src: "/products-underline.svg",
+      src: "/brush-1.svg",
       title: "products",
       path: "/products",
-      w: 145.5,
-      h: 57.81,
+      w: 349,
+      h: 49,
     },
     {
-      src: "/add-underline.svg",
+      src: "/brush-2.svg",
       title: "your advertisements",
       path: "/advertisements",
-      w: 247,
+      w: 315,
       h: 55,
     },
     {
-        src: "/profile-underline.svg",
+        src: "/brush-3.svg",
         title: "your profile",
         path: "/your_profile",
-        w: 165,
-        h: 48,
+        w: 361,
+        h: 41,
     }
   ];
 

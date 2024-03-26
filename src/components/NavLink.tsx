@@ -10,13 +10,15 @@ const NavLink = ({ item }: any) => {
     return (
     <>
     <Link
-      href={item.path}
+      href={item.path} 
     >
-      {item.title}
+      <p className={`${styles.p} ${
+      pathName === item.path && styles.p_active
+    }`} style={{zIndex: '100', position: 'relative'}} >{item.title}</p>
     </Link>
     <div className={`${styles.link_img} ${
       pathName === item.path && styles.active
-    }`}>
+    }`} >
         <Link
       href={item.path}
     >
