@@ -4,7 +4,13 @@ import Link from 'next/link'
 import Image from 'next/image'
 import {getCurrentDateAndYear, getDayName, getMonthName} from '@/utils/Datetime'
 import NavLink from './NavLink'
-
+type Props ={
+  src: string,
+  title: string,
+  path:string,
+  w: number,
+  h: number,
+}
 const Links=[
     {
       src: "/brush-1.svg",
@@ -25,7 +31,7 @@ const Links=[
         title: "your profile",
         path: "/your_profile",
         w: 361,
-        h: 41,
+        h: 47,
     }
   ];
 
@@ -63,7 +69,6 @@ const Header = () => {
             
             </div>
             <div className={styles.link}>
-            {/* <Link href='/products'>products</Link> */}
             <NavLink item={Links[0]} />
             </div>
             <div className={styles.link}>
