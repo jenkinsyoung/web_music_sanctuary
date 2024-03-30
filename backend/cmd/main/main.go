@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/api"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/config"
+	"github.com/jenkinsyoung/web_music_sanctuary/internal/database"
 	_ "github.com/jenkinsyoung/web_music_sanctuary/internal/hash"
 	"log"
 	"net/http"
@@ -18,6 +19,12 @@ func main() {
 		WriteTimeout: cfg.Timeout,
 		IdleTimeout:  cfg.IdleTimeout,
 	}
+
+	Connection, err := database.ConnectToDB(cfg.Database)
+	if err != nil {
+		log.Fatalf("Database error %s", err)
+	}
+
 	if err := srv.ListenAndServe(); err != nil {
 		log.Fatalf("Error occured: %s", err)
 	}

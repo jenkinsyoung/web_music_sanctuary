@@ -3,8 +3,8 @@ package jwt
 import (
 	"errors"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/jenkinsyoung/web_music_sanctuary/internal/database"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/hash"
-	"github.com/jenkinsyoung/web_music_sanctuary/internal/user"
 	"time"
 )
 
@@ -15,7 +15,7 @@ type TokenClaims struct {
 
 func GenerateToken(email, password string) (string, error) {
 	hashedPassword := hash.PasswordHash(password)
-	userID, err := user.GetUserID(email, hashedPassword)
+	userID, err := database.GetUserID(email, hashedPassword)
 	if err != nil {
 		return "", err
 	}
