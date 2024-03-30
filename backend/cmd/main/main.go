@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/api"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/config"
+	_ "github.com/jenkinsyoung/web_music_sanctuary/internal/hash"
 	"log"
 	"net/http"
 )

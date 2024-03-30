@@ -1,7 +1,5 @@
 package models
 
-import "time"
-
 type Category struct {
 	Id   int64  `json:"category_id"`
 	Name string `json:"category_name"`
@@ -22,13 +20,6 @@ type Advertisement struct {
 	Cost            int64  `json:"cost"`
 	//TODO: здесь должны быть images json
 
-}
-
-type Token struct {
-	UserId    int64     `json:"user_id"`
-	Token     string    `json:"token"`
-	ExpiredAt time.Time `json:"expired_at"`
-	CreatedAt time.Time `json:"created_at"`
 }
 
 type User struct {
