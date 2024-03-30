@@ -1,8 +1,8 @@
-import styles from './ProductByIDPage.module.scss'
+import styles from './AdvertisementsByIDPage.module.scss'
 import Slider from '@/components/Slider'
 import Product from '@/ui/Product'
-import UploadImage from '@/components/UploadImage'
-const ProductsByIDPage = ({params} : any) =>{
+
+const AdvertisementsByIDPage = ({params} : any) =>{
     return (
         <div className={styles.container}>
             <div className={styles.info}>
@@ -33,5 +33,5 @@ const ProductsByIDPage = ({params} : any) =>{
     )
 }
 
-export default ProductsByIDPage
+export default AdvertisementsByIDPage
 

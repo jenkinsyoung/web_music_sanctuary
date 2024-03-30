@@ -5,7 +5,14 @@ const ProductsByCategoryPage = ({params} : any) =>{
     return (
         <div className={styles.container}>
             <div className={styles.filters}>
-                Здесь нужны фильтры
+                <select>
+                    <option>yyy</option>
+                    <option>ygttgy</option>
+                    <option>df</option>
+                    <option>yyy</option>
+                </select>
+                Цена
+                <input type="range" />
             </div>
 
             <div className={styles.wrapper}>
