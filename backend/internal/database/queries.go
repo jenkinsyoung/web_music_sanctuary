@@ -12,3 +12,7 @@ func (c *DBConnection) GetUserID(email, hashedPassword string) (int, error) {
 	err := c.db.QueryRow(query, email, hashedPassword).Scan(&id)
 	return id, err
 }
+
+func (c *DBConnection) CreateUser(email, password string) {
+
+}

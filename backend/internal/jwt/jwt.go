@@ -3,8 +3,8 @@ package jwt
 import (
 	"errors"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/jenkinsyoung/web_music_sanctuary/internal/database"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/hash"
+	"os"
 	"time"
 )
 
@@ -13,13 +13,15 @@ type TokenClaims struct {
 	UserId int `json:"user_id"`
 }
 
+var signingKey = os.Getenv("SECRET_KEY")
+
 func GenerateToken(email, password string) (string, error) {
 	hashedPassword := hash.PasswordHash(password)
-	userID, err := database.GetUserID(email, hashedPassword)
+	userID, err := c.GetUserID(email, hashedPassword)
 	if err != nil {
 		return "", err
 	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &TokenClaims{
+	t := jwt.NewWithClaims(jwt.SigningMethodHS256, &TokenClaims{
 		jwt.MapClaims{
 			"ExpiresAt": time.Now().Add(time.Hour * 24 * 7).Unix(),
 			"IssuedAt":  time.Now().Unix(),
@@ -27,7 +29,11 @@ func GenerateToken(email, password string) (string, error) {
 		userID,
 	})
 
-	return token.SigningString([]byte(signingKey))
+	token, err := t.SignedString([]byte(signingKey))
+	if err != nil {
+		return "", err
+	}
+	return token, nil
 }
 
 func ParseToken(accessToken string) (int, error) {
@@ -39,13 +45,12 @@ func ParseToken(accessToken string) (int, error) {
 		return []byte(signingKey), nil
 	})
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
 	claims, ok := token.Claims.(*TokenClaims)
 	if !ok {
-		nil, errors.New("invalid token claims")
+		return 0, errors.New("error in token claims")
 	}
-
 	return claims.UserId, nil
 }
