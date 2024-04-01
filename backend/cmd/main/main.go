@@ -20,9 +20,9 @@ func main() {
 		IdleTimeout:  cfg.IdleTimeout,
 	}
 
-	Connection, err := database.ConnectToDB(cfg.Database)
+	_, err := database.ConnectToDB(cfg.Database)
 	if err != nil {
-		log.Fatalf("Database error %s", err)
+		log.Fatalf("Error occured: %s", err)
 	}
 
 	if err := srv.ListenAndServe(); err != nil {

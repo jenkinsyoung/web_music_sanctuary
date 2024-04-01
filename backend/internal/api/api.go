@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/hash"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/models"
+	"github.com/jenkinsyoung/web_music_sanctuary/pkg/imgMethods"
 	"log"
 	"net/http"
 )
@@ -31,9 +32,27 @@ func LoggingUser(w http.ResponseWriter, r *http.Request) {
 }
 
 //TODO: напистаь отправку объявлений по БОЛЬШОЙ категории
+//TODO: api/upload-image написать загрузку
+
+func ReceiveImage(w http.ResponseWriter, r *http.Request) {
+	photo := models.Photo{}
+	json.NewDecoder(r.Body).Decode(&photo)
+
+	defer r.Body.Close()
+	//TODO: написать файловую структру для сохраниения картино и присовение им айдишников
+	//TODO: к примеру структура storage/image/E4 - картинка
+	//TODO: или storage/image/B5
+	//TODO: разбиение по секторам (скорее всего по свойствам)
+
+	err := imgMethods.SaveImageBase64(photo.Photo)
+	if err != nil {
+		log.Printf("Error decode base64 %s", err)
+	}
+}
 
 func SetupRoutes() http.Handler {
 	router := mux.NewRouter()
 	router.HandleFunc("/api/user", NewUser).Methods("POST")
+	router.HandleFunc("/api/save-image", ReceiveImage).Methods("POST")
 	return router
 }

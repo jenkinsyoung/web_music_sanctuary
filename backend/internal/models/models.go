@@ -28,3 +28,8 @@ type User struct {
 	Password string `json:"password"`
 	Phone    string `json:"phone"`
 }
+
+type Photo struct {
+	Id    string `json:"id"`
+	Photo string `json:"photo"`
+}

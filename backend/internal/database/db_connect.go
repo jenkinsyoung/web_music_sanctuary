@@ -11,6 +11,8 @@ type DBConnection struct {
 	db *sql.DB
 }
 
+var DB *DBConnection
+
 func ConnectToDB(dbStruct config.Database) (*DBConnection, error) {
 	connStr := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
