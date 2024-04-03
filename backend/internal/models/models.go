@@ -6,18 +6,20 @@ type Category struct {
 }
 
 type Microcategory struct {
-	Id             int64 `json:"microcategory_id"`
-	ParentCategory int64
+	Id int64 `json:"microcategory_id"`
+
 	//TODO: здесь должна быть data json
 }
 
 type Advertisement struct {
-	Id              int64  `json:"advertisement_id"`
-	UserId          int64  `json:"user_id"`
-	MicrocategoryId int64  `json:"microcategory_id"`
-	Description     string `json:"description"`
-	Name            string `json:"advertisement_name"`
-	Cost            int64  `json:"cost"`
+	Id              int64   `json:"advertisement_id"`
+	UserId          int64   `json:"user_id"`
+	Description     string  `json:"description"`
+	Name            string  `json:"advertisement_name"`
+	Cost            int64   `json:"cost"`
+	Type            int64   `json:"type_id"`
+	Microcategories []int64 `json:"microcategories"`
+
 	//TODO: здесь должны быть images json
 
 }

@@ -89,10 +89,32 @@ func ReceiveImage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func CreateAdvertisement(w http.ResponseWriter, r *http.Request) {
+	advertisement := models.Advertisement{}
+	json.NewDecoder(r.Body).Decode(&advertisement)
+
+	defer r.Body.Close()
+
+	adID, err := database.DB.NewAdvertisement(&advertisement)
+	if err != nil {
+		log.Printf("Error creating advertisement %s", err)
+	}
+
+	advertisement.Id = adID
+
+	database.DB.NewMicrocategories(&advertisement)
+
+	resp, err := json.Marshal(NewAdvertisementResponse{advertisement.Id})
+	_, err = w.Write(resp)
+
+	w.WriteHeader(http.StatusOK)
+}
+
 func SetupRoutes() http.Handler {
 	router := mux.NewRouter()
 	router.HandleFunc("/api/user", NewUser).Methods("POST")
 	router.HandleFunc("/api/auth", LoggingUser).Methods("POST")
 	router.HandleFunc("/api/save-image", ReceiveImage).Methods("POST")
+	router.HandleFunc("/api/create-ad", CreateAdvertisement).Methods("POST")
 	return router
 }

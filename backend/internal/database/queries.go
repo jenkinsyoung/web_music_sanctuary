@@ -16,13 +16,12 @@ func (c *DBConnection) GetUserID(email, hashedPassword string) (int, error) {
 	if err == sql.ErrNoRows {
 		log.Printf("error no such user in database")
 	}
-	fmt.Println("from get user", hashedPassword)
 	return userID, err
 }
 
 func (c *DBConnection) CreateUser(user *models.User) (int, error) {
 	if c.GetUserInfo(user.Email).Id != 0 {
-		return 0, fmt.Errorf("user alredy exist")
+		return 0, fmt.Errorf("user alredy exists")
 	}
 	query := fmt.Sprintf(`INSERT INTO "user" (email, password, phone) VALUES ($1, $2, $3) RETURNING id`)
 	var userID int
@@ -39,3 +38,29 @@ func (c *DBConnection) GetUserInfo(email string) models.User {
 	}
 	return user
 }
+
+func (c *DBConnection) NewAdvertisement(ad *models.Advertisement) (int64, error) {
+	var adID int64
+	query := fmt.Sprintf(`INSERT INTO "advertisement" (user_id, description, name, cost, type_id) VALUES ($1, $2, $3, $4, $5) RETURNING id`)
+	err := c.db.QueryRow(query, ad.UserId, ad.Description, ad.Name, ad.Cost, ad.Type).Scan(&adID)
+	if err != nil {
+		return 0, err
+	}
+	return adID, nil
+}
+
+func (c *DBConnection) NewMicrocategories(ad *models.Advertisement) {
+	for _, mc := range ad.Microcategories {
+		c.db.QueryRow(`INSERT INTO advertisement_category (advertisement_id, microcategory_id) VALUES ($1, $2)`, ad.Id, mc)
+	}
+}
+
+//func (c *DBConnection) GetGuitarTypeID(name string)(int64, error){
+//	var typeID int64
+//	err := c.db.QueryRow(`SELECT id FROM "type" WHERE name=$1`, name).Scan(&typeID)
+//	if err != nil{
+//		log.Printf("error could not find type of guitar %s", err)
+//		return 0, err
+//	}
+//	return typeID, nil
+//}
