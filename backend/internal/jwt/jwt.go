@@ -2,8 +2,9 @@ package jwt
 
 import (
 	"errors"
+	"fmt"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/jenkinsyoung/web_music_sanctuary/internal/hash"
+	"github.com/jenkinsyoung/web_music_sanctuary/internal/database"
 	"os"
 	"time"
 )
@@ -16,8 +17,8 @@ type TokenClaims struct {
 var signingKey = os.Getenv("SECRET_KEY")
 
 func GenerateToken(email, password string) (string, error) {
-	hashedPassword := hash.PasswordHash(password)
-	userID, err := c.GetUserID(email, hashedPassword)
+	userID, err := database.DB.GetUserID(email, password)
+	fmt.Println("from jwt", password)
 	if err != nil {
 		return "", err
 	}

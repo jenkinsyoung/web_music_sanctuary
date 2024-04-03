@@ -2,9 +2,10 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/jenkinsyoung/web_music_sanctuary/internal/database"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/hash"
+	"github.com/jenkinsyoung/web_music_sanctuary/internal/jwt"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/models"
 	"github.com/jenkinsyoung/web_music_sanctuary/pkg/imgMethods"
 	"log"
@@ -16,10 +17,29 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		log.Printf("Error parsing json: %s", err)
 	}
+
 	user.Password = hash.PasswordHash(user.Password)
-	//TODO: Отправить JWT
-	//TODO: нужно добавить бользователя в базу данных
-	fmt.Println(user)
+
+	id, err := database.DB.CreateUser(&user)
+	if err != nil {
+		log.Printf("error creating user: %s", err)
+	}
+
+	token, err := jwt.GenerateToken(user.Email, user.Password)
+	if err != nil {
+		log.Printf("error generating access token: %s", err)
+	}
+
+	resp, err := json.Marshal(TokenResponse{UserID: id, AccessToken: token})
+	if err != nil {
+		log.Printf("error marshalling json: %s", err)
+	}
+
+	_, err = w.Write(resp)
+	if err != nil {
+		log.Printf("error sending response: %s", err)
+	}
+
 	w.WriteHeader(http.StatusOK)
 }
 
