@@ -18,4 +18,5 @@ func SaveImageBase64(encodedString string) error {
 		return err
 	}
 	return nil
+	//TODO: Написать получение айдишника и создание папки с этим айдишником объявления
 }
