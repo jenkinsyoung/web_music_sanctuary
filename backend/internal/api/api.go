@@ -23,6 +23,8 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 	id, err := database.DB.CreateUser(&user)
 	if err != nil {
 		log.Printf("error creating user: %s", err)
+		w.WriteHeader(http.StatusConflict)
+		return
 	}
 
 	token, err := jwt.GenerateToken(user.Email, user.Password)
@@ -30,7 +32,7 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 		log.Printf("error generating access token: %s", err)
 	}
 
-	resp, err := json.Marshal(TokenResponse{UserID: id, AccessToken: token})
+	resp, err := json.Marshal(TokenResponse{UserID: int64(id), AccessToken: token})
 	if err != nil {
 		log.Printf("error marshalling json: %s", err)
 	}
@@ -49,10 +51,30 @@ func LoggingUser(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Error parsing json: %s", err)
 	}
 	//TODO: написать авторизацию
+	userInfo := database.DB.GetUserInfo(user.Email)
+	if !hash.CheckPassword(user.Password, userInfo.Password) {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+	token, err := jwt.GenerateToken(user.Email, user.Password)
+	if err != nil {
+		log.Printf("error generating access token: %s", err)
+	}
+
+	resp, err := json.Marshal(TokenResponse{UserID: userInfo.Id, AccessToken: token})
+	if err != nil {
+		log.Printf("error marshalling json: %s", err)
+	}
+
+	_, err = w.Write(resp)
+	if err != nil {
+		log.Printf("error sending response: %s", err)
+	}
+	w.WriteHeader(http.StatusOK)
 }
 
 //TODO: напистаь отправку объявлений по БОЛЬШОЙ категории
-//TODO: api/upload-image написать загрузку
+//TODO: api/upload-image написать отправку
 
 func ReceiveImage(w http.ResponseWriter, r *http.Request) {
 	photo := models.Photo{}
@@ -60,9 +82,6 @@ func ReceiveImage(w http.ResponseWriter, r *http.Request) {
 
 	defer r.Body.Close()
 	//TODO: написать файловую структру для сохраниения картино и присовение им айдишников
-	//TODO: к примеру структура storage/image/E4 - картинка
-	//TODO: или storage/image/B5
-	//TODO: разбиение по секторам (скорее всего по свойствам)
 
 	err := imgMethods.SaveImageBase64(photo.Photo)
 	if err != nil {
@@ -73,6 +92,7 @@ func ReceiveImage(w http.ResponseWriter, r *http.Request) {
 func SetupRoutes() http.Handler {
 	router := mux.NewRouter()
 	router.HandleFunc("/api/user", NewUser).Methods("POST")
+	router.HandleFunc("/api/auth", LoggingUser).Methods("POST")
 	router.HandleFunc("/api/save-image", ReceiveImage).Methods("POST")
 	return router
 }

@@ -11,7 +11,6 @@ import (
 )
 
 func main() {
-	//TODO: написать бд-ху и забить данными
 	cfg := config.MustLoad()
 	srv := &http.Server{
 		Addr:         cfg.Address,
