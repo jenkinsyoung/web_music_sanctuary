@@ -17,7 +17,7 @@ type Advertisement struct {
 	Description     string  `json:"description"`
 	Name            string  `json:"advertisement_name"`
 	Cost            int64   `json:"cost"`
-	Type            int64   `json:"type_id"`
+	TypeId          int64   `json:"type_id"`
 	Microcategories []int64 `json:"microcategories"`
 
 	//TODO: здесь должны быть images json

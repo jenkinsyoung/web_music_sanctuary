@@ -14,7 +14,6 @@ func PasswordHash(password string) string {
 }
 
 func CheckPassword(password, hashedPassword string) bool {
-	//TODO: придумать как использовать эту функцию, с sql тут, или разбить на несколько функций?
 	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 	if err != nil {
 		return false

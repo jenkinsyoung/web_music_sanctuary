@@ -10,6 +10,7 @@ import (
 	"github.com/jenkinsyoung/web_music_sanctuary/pkg/imgMethods"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func NewUser(w http.ResponseWriter, r *http.Request) {
@@ -110,11 +111,47 @@ func CreateAdvertisement(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+func GetAdvertisement(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+	if err != nil {
+		log.Printf("not valid id")
+	}
+
+	adv, err := database.DB.GetAdvertisementByID(int64(id))
+
+	if err != nil {
+		log.Printf(err.Error())
+	}
+
+	resp, err := json.Marshal(adv)
+
+	_, err = w.Write(resp)
+	w.WriteHeader(http.StatusOK)
+}
+
+func GetAllAdvertisements(w http.ResponseWriter, r *http.Request) {
+	advertisements, err := database.DB.GetAdvertisements()
+	if err != nil {
+		log.Printf("could not select advertisements from db %s", err)
+	}
+
+	resp, err := json.Marshal(AllAdvertisements{Advertisements: advertisements})
+
+	_, err = w.Write(resp)
+
+	w.WriteHeader(http.StatusOK)
+
+}
+
 func SetupRoutes() http.Handler {
 	router := mux.NewRouter()
 	router.HandleFunc("/api/user", NewUser).Methods("POST")
 	router.HandleFunc("/api/auth", LoggingUser).Methods("POST")
 	router.HandleFunc("/api/save-image", ReceiveImage).Methods("POST")
 	router.HandleFunc("/api/create-ad", CreateAdvertisement).Methods("POST")
+
+	router.HandleFunc("/api/get-ad/{id}", GetAdvertisement).Methods("GET")
+	router.HandleFunc("/api/get-ads", GetAllAdvertisements).Methods("GET")
+
 	return router
 }
