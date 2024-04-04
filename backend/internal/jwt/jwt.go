@@ -11,17 +11,14 @@ import (
 
 type TokenClaims struct {
 	jwt.Claims
-	UserId int `json:"user_id"`
+	UserId int64 `json:"user_id"`
 }
 
 var signingKey = os.Getenv("SECRET_KEY")
 
 func GenerateToken(email, password string) (string, error) {
-	userID, err := database.DB.GetUserID(email, password)
+	userID := database.DB.GetUserInfo(email).Id
 	fmt.Println("from jwt", password)
-	if err != nil {
-		return "", err
-	}
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, &TokenClaims{
 		jwt.MapClaims{
 			"ExpiresAt": time.Now().Add(time.Hour * 24 * 7).Unix(),
@@ -37,7 +34,7 @@ func GenerateToken(email, password string) (string, error) {
 	return token, nil
 }
 
-func ParseToken(accessToken string) (int, error) {
+func ParseToken(accessToken string) (int64, error) {
 	token, err := jwt.Parse(accessToken, func(token *jwt.Token) (i interface{}, err error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("invalid signing method")

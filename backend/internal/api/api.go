@@ -51,7 +51,6 @@ func LoggingUser(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		log.Printf("Error parsing json: %s", err)
 	}
-	//TODO: написать авторизацию
 	userInfo := database.DB.GetUserInfo(user.Email)
 	if !hash.CheckPassword(user.Password, userInfo.Password) {
 		w.WriteHeader(http.StatusNotFound)
@@ -96,9 +95,13 @@ func CreateAdvertisement(w http.ResponseWriter, r *http.Request) {
 
 	defer r.Body.Close()
 
+	//TODO: Здесь должно быть получение данных из МЛ и подгрузка МК и К и тд...
+
 	adID, err := database.DB.NewAdvertisement(&advertisement)
 	if err != nil {
 		log.Printf("Error creating advertisement %s", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	advertisement.Id = adID

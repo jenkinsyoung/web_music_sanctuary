@@ -10,16 +10,6 @@ import (
 
 // const Connection, err := ConnectToDB()
 
-// TODO: полная хуйня? или нет для получения толького Id?
-func (c *DBConnection) GetUserID(email, hashedPassword string) (int, error) {
-	var userID int
-	err := c.db.QueryRow(`SELECT id FROM "user" WHERE email=$1 AND password=$2`, email, hashedPassword).Scan(&userID)
-	if err == sql.ErrNoRows {
-		log.Printf("error no such user in database")
-	}
-	return userID, err
-}
-
 func (c *DBConnection) CreateUser(user *models.User) (int, error) {
 	if c.GetUserInfo(user.Email).Id != 0 {
 		return 0, fmt.Errorf("user alredy exists")
