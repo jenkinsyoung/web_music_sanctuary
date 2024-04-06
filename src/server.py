@@ -1,6 +1,7 @@
 from http.server import BaseHTTPRequestHandler
 from http.server import HTTPServer
 import utilities.encode as b64
+from utilities.predictionparse import parsepred
 from yolov9 import detect
 
 import sys
@@ -41,17 +42,18 @@ class Server(BaseHTTPRequestHandler):
             "device": 0,
             "save_txt": True,
             "weights": "src/yolov9/gelan-c.pt",
-            "source": 'src/yolov9/data/images/horses.png'
+            "source": 'src/yolov9/data/images/image.png',
+            "exist_ok": True
         }
         detect.main(opt)
         try:
             del message["image"]
         except KeyError:
             pass
-        message['status'] = 'ok'
+        responce = parsepred()
         # send the message back
         self._set_headers()
-        self.wfile.write(json.dumps(message).encode())
+        self.wfile.write(json.dumps(responce).encode())
         
 def run(server_class=HTTPServer, handler_class=Server, port=8008):
     server_address = ('', port)
