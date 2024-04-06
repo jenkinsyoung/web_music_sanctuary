@@ -116,20 +116,20 @@ func User(w http.ResponseWriter, r *http.Request) {
 //TODO: api/upload-image написать отправку
 
 func ReceiveImage(w http.ResponseWriter, r *http.Request) {
-	photo := models.Photo{}
+	photo := models.Picture{}
 	json.NewDecoder(r.Body).Decode(&photo)
 
 	defer r.Body.Close()
 	//TODO: написать файловую структру для сохраниения картино и присовение им айдишников
 
-	err := imgMethods.SaveImageBase64(photo.Photo)
+	err := imgMethods.SaveImageBase64(photo.Image)
 	if err != nil {
 		log.Printf("Error decode base64 %s", err)
 	}
 }
 
 func CreateAdvertisement(w http.ResponseWriter, r *http.Request) {
-	advertisement := models.Advertisement{}
+	advertisement := models.Listing{}
 	json.NewDecoder(r.Body).Decode(&advertisement)
 
 	defer r.Body.Close()
@@ -159,7 +159,7 @@ func GetAdvertisement(w http.ResponseWriter, r *http.Request) {
 		log.Printf("not valid id")
 	}
 
-	adv, err := database.DB.GetAdvertisementByID(int64(id))
+	adv, err := database.DB.GetListingByID(int64(id))
 
 	if err != nil {
 		log.Printf(err.Error())
@@ -172,7 +172,7 @@ func GetAdvertisement(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetAllAdvertisements(w http.ResponseWriter, r *http.Request) {
-	advertisements, err := database.DB.GetAdvertisements()
+	advertisements, err := database.DB.GetListings()
 	if err != nil {
 		log.Printf("could not select advertisements from db %s", err)
 	}

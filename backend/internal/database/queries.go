@@ -14,93 +14,64 @@ func (c *DBConnection) CreateUser(user *models.User) (int, error) {
 	if c.GetUserInfo(user.Email).Id != 0 {
 		return 0, fmt.Errorf("user alredy exists")
 	}
-	query := fmt.Sprintf(`INSERT INTO "user" (email, password, phone) VALUES ($1, $2, $3) RETURNING id`)
+	query := fmt.Sprintf(`INSERT INTO "user" (name, surname, patronymic, email, password, phone) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`)
 	var userID int
-	err := c.db.QueryRow(query, user.Email, user.Password, user.Phone).Scan(&userID)
+	err := c.db.QueryRow(query, user.Name, user.Surname, user.Patronymic, user.Email, user.Password, user.Phone).Scan(&userID)
 	return userID, err
-
 }
 
 func (c *DBConnection) GetUserInfo(email string) models.User {
 	var user models.User
-	err := c.db.QueryRow(`SELECT * FROM "user" WHERE email=$1`, email).Scan(&user.Id, &user.Email, &user.Password, &user.Phone)
+	err := c.db.QueryRow(`SELECT * FROM "user" WHERE email=$1`, email).Scan(&user.Id, &user.Name, &user.Surname,
+		&user.Patronymic, &user.Email, &user.Password, &user.Phone)
 	if err != nil {
-		log.Printf("Error get user data using email %s", err)
+		log.Printf("Error getting user data using email %s", err)
 	}
 	return user
 }
 
-func (c *DBConnection) NewAdvertisement(ad *models.Advertisement) (int64, error) {
-	var adID int64
-	query := fmt.Sprintf(`INSERT INTO "advertisement" (user_id, description, name, cost, type_id) VALUES ($1, $2, $3, $4, $5) RETURNING id`)
-	err := c.db.QueryRow(query, ad.UserId, ad.Description, ad.Name, ad.Cost, ad.TypeId).Scan(&adID)
-	if err != nil {
-		return 0, err
-	}
-	return adID, nil
-}
+//func (c *DBConnection) NewListing(ad *models.Listing) (int64, error) {
+//	var listingID int64
+//	query := fmt.Sprintf(`INSERT INTO "listing" (user_id, guitar_id, name, cost, description) VALUES ($1, $2, $3, $4, $5) RETURNING id`)
+//	err := c.db.QueryRow(query, ad.UserId, ad.Description, ad.Name, ad.Cost, ad.TypeId).Scan(&listingID)
+//	if err != nil {
+//		return 0, err
+//	}
+//	return adID, nil
+//}
 
-func (c *DBConnection) NewMicrocategories(ad *models.Advertisement) {
-	for _, mc := range ad.Microcategories {
-		c.db.QueryRow(`INSERT INTO advertisement_category (advertisement_id, microcategory_id) VALUES ($1, $2)`, ad.Id, mc)
-	}
-}
-
-func (c *DBConnection) GetAdvertisementByID(id int64) (models.Advertisement, error) {
-	var adv models.Advertisement
-	if err := c.db.QueryRow(`SELECT * FROM "advertisement" WHERE id=$1`, id).Scan(&adv.Id, &adv.UserId,
-		adv.Description, adv.Name, adv.Cost, adv.TypeId); err != nil {
+func (c *DBConnection) GetListingByID(id int64) (models.Listing, error) {
+	var listing models.Listing
+	if err := c.db.QueryRow(`SELECT * FROM "listing" WHERE id=$1`, id).Scan(&listing.Id, &listing.UserId,
+		&listing.GuitarId, &listing.GuitarName, &listing.Cost, listing.Description); err != nil {
 		if err == sql.ErrNoRows {
-			return adv, errors.New("advertisement with this id does not exist")
+			return listing, errors.New("advertisement with this id does not exist")
 		}
-		return adv, errors.New("error getting advertisement using id")
+		return listing, errors.New("error getting advertisement using id")
 	}
 
-	adv.Microcategories = c.GetMicrocategoriesForAdvertisement(adv.Id)
-
-	return adv, nil
+	return listing, nil
 }
 
-func (c *DBConnection) GetAdvertisements() ([]models.Advertisement, error) {
-	var advertisements []models.Advertisement
+func (c *DBConnection) GetListings() ([]models.Listing, error) {
+	var listings []models.Listing
 
-	rows, err := c.db.Query(`SELECT * FROM "advertisement"`)
+	rows, err := c.db.Query(`SELECT * FROM "listing"`)
 	if err != nil {
-		return advertisements, err
+		return listings, err
 	}
 	defer rows.Close()
 
 	for rows.Next() {
-		var adv models.Advertisement
-		if err := rows.Scan(&adv.Id, &adv.UserId, &adv.Description, &adv.Name, &adv.Cost, &adv.TypeId); err != nil {
-			return advertisements, err
+		var listing models.Listing
+		if err := rows.Scan(&listing.Id, &listing.UserId,
+			&listing.GuitarId, &listing.GuitarName, &listing.Cost, listing.Description); err != nil {
+			return listings, err
 		}
-		adv.Microcategories = c.GetMicrocategoriesForAdvertisement(adv.Id)
-		advertisements = append(advertisements, adv)
+		listings = append(listings, listing)
 	}
 
-	return advertisements, nil
-}
-
-func (c *DBConnection) GetMicrocategoriesForAdvertisement(adID int64) []int64 {
-	var res []int64
-
-	rows, err := c.db.Query(`SELECT microcategory_id FROM "advertisement_category" WHERE advertisement_id=$1`, adID)
-	if err != nil {
-		return res
-	}
-
-	defer rows.Close()
-
-	for rows.Next() {
-		var mcId int64
-		if err := rows.Scan(&mcId); err != nil {
-			return res
-		}
-		res = append(res, mcId)
-	}
-
-	return res
+	return listings, nil
 }
 
 //func (c *DBConnection) GetGuitarTypeID(name string)(int64, error){
