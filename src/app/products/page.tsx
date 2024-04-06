@@ -1,3 +1,4 @@
+import UploadImage from '@/components/UploadImage'
 import styles from './ProductPage.module.scss'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -61,6 +62,8 @@ const ProductPage =()=>{
                 </div>  
             </Link>  
             </div>
+
+            <UploadImage />
         </div>
     )
 }
