@@ -1,11 +1,11 @@
 import MultiRangesSlider from '@/ui/MultiRangesSlider';
-const PriceFilter = () => {
+const PriceFilter = ({min, max} : any) => {
   return(
-    <div className='h-40 p-5 rounded-md space-y-2'>
+    <div className='h-40 p-3 space-y-2'>
       <h2 style={{fontSize: '18px', fontWeight: '600'}}>Цена:</h2>
       <MultiRangesSlider
-        min={0}
-        max={100}
+        min={min}
+        max={max}
          />
     </div>
   )

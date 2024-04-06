@@ -65,7 +65,7 @@ const MultiRangesSlider = ({min, max} : any) => {
         />
     
         <div className='relative w-52'>
-             <div className='flex' style={{marginTop: '12px', width: '200px', justifyContent: 'space-between'}}>  
+             <div className='flex' style={{marginTop: '12px', width: '390px', justifyContent: 'space-between'}}>  
             <div className='absolute left-2 text-xs mt-14'>{minVal}</div>
             <div className='absolute right-2 text-xs mt-14'>{maxVal}</div>
             </div> 

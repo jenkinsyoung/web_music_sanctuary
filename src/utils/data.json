@@ -1,0 +1,105 @@
+{
+    "categories": [
+        {
+            "category_id": 1,
+            "name": "Количество струн"
+        },
+        {
+            "category_id": 2,
+            "name": "Форма"
+        },
+        {
+            "category_id": 3,
+            "name": "Звукосниматели"
+        },
+        {
+            "category_id": 4,
+            "name": "Вид"
+        }
+    ],
+    "types": [
+        {
+            "type_id": 1,
+            "name": "Акустическая гитара"
+        },
+        {
+            "type_id": 2,
+            "name": "Электрогитара"
+        },
+        {
+            "type_id": 3,
+            "name": "Бас-гитара"
+        },
+        {
+            "type_id": 4,
+            "name": "Классическая гитара"
+        },
+        {
+            "type_id": 5,
+            "name": "Укулеле"
+        }
+    ],
+    "categories_types": [
+        {
+            "type_id": 1,
+            "type_name": "Акустическая гитара",
+            "categories": [
+                {
+                    "category_id": 1,
+                    "category_name": "Количество струн"
+                },
+                {
+                    "category_id": 2,
+                    "category_name": "Форма"
+                },
+                {
+                    "category_id": 4,
+                    "category_name": "Вид"
+                }
+            ]
+        },
+        {
+            "type_id": 2,
+            "type_name": "Электрогитара",
+            "categories": [
+                {
+                    "category_id": 1,
+                    "category_name": "Количество струн"
+                },
+                {
+                    "category_id": 2,
+                    "category_name": "Форма"
+                },
+                {
+                    "category_id": 3,
+                    "category_name": "Звукосниматели"
+                }
+            ]
+        },
+        {
+            "type_id": 3,
+            "type_name": "Бас-гитара",
+            "categories": [
+                {
+                    "category_id": 1,
+                    "category_name": "Количество струн"
+                },
+                {
+                    "category_id": 2,
+                    "category_name": "Форма"
+                }
+            ]
+        },
+        {
+            "type_id": 5,
+            "type_name": "Укулеле",
+            "categories": [
+                {
+                    "category_id": 4,
+                    "category_name": "Вид"
+                }
+            ]
+        }
+    ]
+}
+

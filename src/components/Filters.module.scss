@@ -1,0 +1,37 @@
+.container{
+    padding: 24px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    >h5{
+        font-size: 18px;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    >.window_number{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-column-gap: 10px;
+        align-items: center;
+        margin:auto;
+        >div{
+            display: flex;
+            gap: 5px;
+        }
+    }
+    >.window{
+        display:grid;
+        overflow: hidden;
+        grid-template-rows: repeat(4, 1fr);
+        grid-template-columns: repeat(2, 1fr);
+        grid-column-gap: 12px;
+        >div{
+            display: flex;
+            gap: 5px;
+            >input{
+                font-size: 20px; 
+            }
+                  
+        }
+    }
+}
