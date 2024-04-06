@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	jwt2 "github.com/golang-jwt/jwt/v5"
 	"github.com/gorilla/mux"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/database"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/hash"
@@ -11,9 +12,10 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 )
 
-func NewUser(w http.ResponseWriter, r *http.Request) {
+func Register(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		log.Printf("Error parsing json: %s", err)
@@ -46,7 +48,7 @@ func NewUser(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func LoggingUser(w http.ResponseWriter, r *http.Request) {
+func Authorization(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		log.Printf("Error parsing json: %s", err)
@@ -61,7 +63,44 @@ func LoggingUser(w http.ResponseWriter, r *http.Request) {
 		log.Printf("error generating access token: %s", err)
 	}
 
+	cookie := &http.Cookie{
+		Name:     "jwt",
+		Value:    token,
+		Expires:  time.Now().Add(time.Hour * 24 * 7),
+		HttpOnly: true,
+		Secure:   true,
+	}
+
+	http.SetCookie(w, cookie)
+
 	resp, err := json.Marshal(TokenResponse{UserID: userInfo.Id, AccessToken: token})
+	if err != nil {
+		log.Printf("error marshalling json: %s", err)
+	}
+
+	_, err = w.Write(resp)
+	if err != nil {
+		log.Printf("error sending response: %s", err)
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func User(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("jwt")
+	if err != nil {
+		log.Printf("error getting cookie %s", err)
+	}
+
+	token, err := jwt2.ParseWithClaims(cookie.String(), &jwt2.MapClaims{}, func(token *jwt2.Token) (interface{}, error) {
+		return []byte(jwt.SigningKey), nil
+	})
+
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	resp, err := json.Marshal(token.Claims)
 	if err != nil {
 		log.Printf("error marshalling json: %s", err)
 	}
@@ -148,11 +187,13 @@ func GetAllAdvertisements(w http.ResponseWriter, r *http.Request) {
 
 func SetupRoutes() http.Handler {
 	router := mux.NewRouter()
-	router.HandleFunc("/api/user", NewUser).Methods("POST")
-	router.HandleFunc("/api/auth", LoggingUser).Methods("POST")
+
+	router.HandleFunc("/api/sign-up", Register).Methods("POST")
+	router.HandleFunc("/api/sign-in", Authorization).Methods("POST")
 	router.HandleFunc("/api/save-image", ReceiveImage).Methods("POST")
 	router.HandleFunc("/api/create-ad", CreateAdvertisement).Methods("POST")
 
+	router.HandleFunc("/api/user", User).Methods("GET")
 	router.HandleFunc("/api/get-ad/{id}", GetAdvertisement).Methods("GET")
 	router.HandleFunc("/api/get-ads", GetAllAdvertisements).Methods("GET")
 

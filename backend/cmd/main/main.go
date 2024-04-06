@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gorilla/handlers"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/api"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/config"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/database"
@@ -14,7 +15,7 @@ func main() {
 	cfg := config.MustLoad()
 	srv := &http.Server{
 		Addr:         cfg.Address,
-		Handler:      api.SetupRoutes(),
+		Handler:      handlers.CORS(handlers.AllowCredentials())(api.SetupRoutes()),
 		ReadTimeout:  cfg.Timeout,
 		WriteTimeout: cfg.Timeout,
 		IdleTimeout:  cfg.IdleTimeout,

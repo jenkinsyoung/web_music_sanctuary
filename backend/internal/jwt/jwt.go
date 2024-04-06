@@ -14,7 +14,7 @@ type TokenClaims struct {
 	UserId int64 `json:"user_id"`
 }
 
-var signingKey = os.Getenv("SECRET_KEY")
+var SigningKey = os.Getenv("SECRET_KEY")
 
 func GenerateToken(email, password string) (string, error) {
 	userID := database.DB.GetUserInfo(email).Id
@@ -27,7 +27,7 @@ func GenerateToken(email, password string) (string, error) {
 		userID,
 	})
 
-	token, err := t.SignedString([]byte(signingKey))
+	token, err := t.SignedString([]byte(SigningKey))
 	if err != nil {
 		return "", err
 	}
@@ -40,7 +40,7 @@ func ParseToken(accessToken string) (int64, error) {
 			return nil, errors.New("invalid signing method")
 		}
 
-		return []byte(signingKey), nil
+		return []byte(SigningKey), nil
 	})
 	if err != nil {
 		return 0, err
