@@ -59,7 +59,7 @@ const Header = () => {
                 <h3>The best music store</h3>
             </div>
             <div className={styles.creator}>
-                <button>create an advertisement</button>
+                <Link href='/creation'><button>create an advertisement</button></Link>
             </div>
             
         </div>

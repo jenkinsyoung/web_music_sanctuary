@@ -1,7 +1,7 @@
 "use client"
 import styles from './HopePage.module.scss';
 import Image from 'next/image';
-
+import Link from 'next/link';
 const HomePage = () => {
   return (
     <div className={styles.container}>
@@ -13,7 +13,7 @@ const HomePage = () => {
             <p>It has now become easier to sell music equipment. You only need to take photos, and we will make an announcement for you, select the optimal price, and offer it to other customers.</p>
             <p>All you have to do is specify your contacts and wait for the message.</p>
           </div>
-          <button>create an advertisement</button>
+          <button><Link href ='/creation'>create an advertisement</Link></button>
           <div className={styles.image}><div className={styles.img} style={{backgroundImage: 'url(/music_equipment.svg)'}}/></div>
         </div>
         <div className={styles.hotline}>
