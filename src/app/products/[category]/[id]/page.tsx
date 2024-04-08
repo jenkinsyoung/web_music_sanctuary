@@ -1,21 +1,26 @@
+"use client"
 import styles from './ProductByIDPage.module.scss'
 import Slider from '@/components/Slider'
 import Product from '@/ui/Product'
-import UploadImage from '@/components/UploadImage'
+import { usePathname } from 'next/navigation'
+import data from '@/utils/data.json'
 const ProductsByIDPage = ({params} : any) =>{
+    const path = usePathname();
+    const id = Number(path.split('/')[3]);
+    const product = data[id]
     return (
         <div className={styles.container}>
             <div className={styles.info}>
                 <div className={styles.main}>
-                    <h1>Гитара 2239402-21ш349</h1>
-                    <Slider />
+                    <h1>{product.name}</h1>
+                    <Slider product = {product}/>
                 </div>
                 <div className={styles.desc}>
                     <h2>Описание:</h2>
-                    <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore quos iste ipsam reiciendis soluta nemo iusto vero quis unde! Beatae id quidem rerum eligendi culpa possimus dolorum nam facere? Culpa.</div>
+                    <div>{product.description}</div>
                     <div className={styles.cost}>
                         <h2>Цена:</h2>
-                        <span>12000 ₽</span>
+                        <span>{product.cost} ₽</span>
                     </div>
                 </div>
             </div>
@@ -23,12 +28,11 @@ const ProductsByIDPage = ({params} : any) =>{
                 <h2>Контакты:</h2>
             </div>
             <div className={styles.wrapper}>
-                <Product />
-                <Product />
-                <Product />
-                <Product />
+                <Product product={data[0]}/>
+                <Product product={data[1]} />
+                <Product product={data[3]}/>
+                <Product product={data[4]}/>
             </div>
-        {/* <UploadImage /> */}
         </div>
     )
 }

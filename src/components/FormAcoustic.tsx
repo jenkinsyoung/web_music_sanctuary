@@ -1,18 +1,26 @@
 import React from 'react'
 import styles from './Filters.module.scss'
-const FormAcoustic = () => {
+const FormAcoustic = ({currentForm, onChangeCategory}:any) => {
   return (
     <div className={styles.container}>
        <h5>Форма гитары</h5>
         <div className={styles.window}>
-            <input type="checkbox" />
+          <div>
+            <input type="checkbox" checked={currentForm.includes('Parlor')} onChange={(e) => onChangeCategory('Parlor', e.target.checked)}/>
             <label>Parlor</label>
-            <input type="checkbox" />
+          </div>
+          <div>
+            <input type="checkbox" checked={currentForm.includes('Dreadnought')} onChange={(e) => onChangeCategory('Dreadnought', e.target.checked)}/>
             <label>Dreadnought</label>
-            <input type="checkbox" />
+          </div>
+          <div>
+            <input type="checkbox" checked={currentForm.includes('Concert')} onChange={(e) => onChangeCategory('Concert', e.target.checked)}/>
             <label>Concert</label>
-            <input type="checkbox" />
-            <label>Triple-o</label>
+          </div>
+          <div>
+            <input type="checkbox" checked={currentForm.includes('Triple-O')} onChange={(e) => onChangeCategory('Triple-O', e.target.checked)}/>
+            <label>Triple-O</label>
+          </div>
         </div>
     </div>
   )

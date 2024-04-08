@@ -1,21 +1,26 @@
+"use client"
 import styles from './AdvertisementsByIDPage.module.scss'
 import Slider from '@/components/Slider'
 import Product from '@/ui/Product'
-
+import { usePathname } from 'next/navigation'
+import data from '@/utils/data.json'
 const AdvertisementsByIDPage = ({params} : any) =>{
+    const path = usePathname();
+    const id = Number(path.split('/')[2]);
+    const product = data[id-1]
     return (
         <div className={styles.container}>
             <form className={styles.info}>
                 <div className={styles.main}>
-                    <input className={styles.h1} placeholder={`Гитара 2239402-21ш349`}/>
-                    <Slider />
+                    <input className={styles.h1} placeholder={`${product.name}`}/>
+                    <Slider product={product}/>
                 </div>
                 <div className={styles.desc}>
                     <h2>Описание:</h2>
-                    <div><textarea placeholder={`Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore quos iste ipsam reiciendis soluta nemo iusto vero quis unde! Beatae id quidem rerum eligendi culpa possimus dolorum nam facere? Culpa.`} /></div>
+                    <div><textarea placeholder={`${product.description}`} /></div>
                     <div className={styles.cost}>
                         <h2>Цена:</h2>
-                        <span><input type='number' placeholder={`12000`}/>₽</span>
+                        <span><input type='number' placeholder={`${product.cost}`}/>₽</span>
                     </div>
 
                     <button type='submit'>Сохранить</button>
@@ -24,13 +29,6 @@ const AdvertisementsByIDPage = ({params} : any) =>{
             <div className={styles.contacts}>
                 <h2>Контакты:</h2>
             </div>
-            <div className={styles.wrapper}>
-                <Product />
-                <Product />
-                <Product />
-                <Product />
-            </div>
-        {/* <UploadImage /> */}
         </div>
     )
 }

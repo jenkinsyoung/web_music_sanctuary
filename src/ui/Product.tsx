@@ -1,15 +1,14 @@
 import styles from './Product.module.scss'
 import Link from 'next/link'
-const Product = () => {
 
-  
+const Product = ({product} : any) => {
     return (
         <div className={styles.container}>
-            <h1>Гитара 2239402-21ш349</h1>
-            <div className={styles.img} style={{backgroundImage: `url(/add_guitar.png)`}} />
-            <div className={styles.tags}>#pppp #ppppp #pppp</div>
-            <div className={styles.cost}><p>Цена:</p><span>10000 ₽</span></div>
-            <Link href={`/products/category/id`}><button>see more</button></Link>
+            <h1>{product.name}</h1>
+            <div className={styles.img} style={{backgroundImage: `url(/${product.image[0].src})`}} />
+            <div className={styles.tags}>#{product.pickup_configuration} #{product.form}</div>
+            <div className={styles.cost}><p>Цена:</p><span>{product.cost} ₽</span></div>
+            <Link href={`/products/${product.category}/${product.id}`}><button>see more</button></Link>
         </div>
     )
   

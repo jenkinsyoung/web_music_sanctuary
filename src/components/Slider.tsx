@@ -2,23 +2,24 @@
 import { useState } from 'react';
 import styles from './Slider.module.scss'
 
-const images=[
-    {
-        'id': 1,
-        'url': '/add_guitar.png'
-    },
-    {
-        'id': 2,
-        'url': '/add_guitar2.jpg'
-    },
-    {
-        'id': 3,
-        'url': '/add_guitar3.jpg'
-    }
-]
-const Slider = () =>{
-    const image=images
-    
+// const images=[
+//     {
+//         'id': 1,
+//         'url': '/add_guitar.png'
+//     },
+//     {
+//         'id': 2,
+//         'url': '/add_guitar2.jpg'
+//     },
+//     {
+//         'id': 3,
+//         'url': '/add_guitar3.jpg'
+//     }
+// ]
+
+const Slider = ({product} : any) =>{
+    const image = product.image
+    console.log(image)
     const [currentIndex, setCurrentIndex]= useState(0)
 
     const slideStyles ={
@@ -27,7 +28,7 @@ const Slider = () =>{
         borderRadius: '10px',
         backgroundPosition: 'center',
         backgroundSize:'cover',
-        backgroundImage: `url(${image[currentIndex].url})`,
+        backgroundImage: `url(/${image[currentIndex].src})`,
         margin: 'auto',
         transition: '0.5s'
     }
@@ -54,7 +55,7 @@ const Slider = () =>{
             <div style={{height: '100%', position: 'relative'}}>
             <div style={slideStyles}/>
             <div style={dotsContainerStyles}>
-        {image.map((slide, slideIndex) => (
+        {image.map((slide : any, slideIndex : any) => (
           <div
           className={`${styles.index} ${
             (slideIndex == currentIndex) && styles.active

@@ -1,105 +1,145 @@
-{
-    "categories": [
+[
         {
-            "category_id": 1,
-            "name": "Количество струн"
+          "id": 1,
+          "user_id": "34",
+          "image":[
+            {
+              "id": 1,
+              "src": "1.1.png"
+            },
+            {
+              "id": 2,
+              "src": "1.2.png"
+            }
+          ],
+          "form": "Stratocaster",
+          "pickup_configuration": "SSS",
+          "category": "electric_guitar",
+          "name": "Fender PLAYER Stratocaster PF 3-Tone Sunburst",
+          "cost": "119999",
+          "description": "Электрогитара Fender Stratocaster (partscaster), вдохновленная гитарами конца 1960-х годов. Гриф мастеровой, клен с палисандровой накладкой. Точная копия грифа 1968 года. Радиус 7,25. Большая голова. Лады выровнены и заполированы. Анкер регулируется в пятке. Винтажные колки. Некплейт оригинальный Fender. Корпус от мексиканского стратокастера, предположительно 2000-2010х годов. Есть небольшие сколы и царапины, на фото видно. Внутренние полости экранированы медью."
         },
+      
         {
-            "category_id": 2,
-            "name": "Форма"
+          "id": 2,
+          "user_id": "34",
+          "form": "SG",
+          "image":[
+            {
+              "id": 1,
+              "src": "2.1.png"
+            },
+            {
+              "id": 2,
+              "src": "2.2.png"
+            }
+          ],
+          "pickup_configuration": "HH",
+          "category": "electric_guitar",
+          "name": "Harley Benton DC Style",
+          "cost": "11999",
+          "description": "Harley Benton Electric Guitar Kit SG Style. Электрогитара harley benton SG, сделанная из набора собери сам, который продается на thomann."
         },
+      
         {
-            "category_id": 3,
-            "name": "Звукосниматели"
+          "id": 3,
+          "user_id": "78",
+          "image":[
+            {
+              "id": 1,
+              "src": "3.1.png"
+            },
+            {
+              "id": 2,
+              "src": "3.2.png"
+            }
+          ],
+          "form": "Explorer",
+          "pickup_configuration": "HH",
+          "category": "electric_guitar",
+          "name": "Gibson Explorer '76 Reissue Ebony",
+          "cost": "160000",
+          "description": "Добротный эксплорер для рубки трэша и модерн метала! Управление всё по стандарту: две громкости (нек и бридж), что даёт возможность баловаться функцией Kill Switch при закрытой громкости одного датчика, общий тон и трёх позиционный переключатель."
         },
+      
         {
-            "category_id": 4,
-            "name": "Вид"
+          "id": 4,
+          "user_id": "78",
+          "image":[
+            {
+              "id": 1,
+              "src": "4.1.png"
+            },
+            {
+              "id": 2,
+              "src": "4.2.png"
+            }
+          ],
+          "form": "Dreadnought",
+          "pickup_configuration": null,
+          "category": "acoustic_guitar",
+          "name": "Fender FA-125",
+          "cost": "14900",
+          "description": "Шестиструнная акустическая гитара FENDER FA-125 Dreadnought сочетает в себе прекрасный звук и изысканный стиль, который разработали мастера Fender. Все это сделано для того, чтобы музыканты получили очень гибкой и вдохновляющий инструмент для исполнения музыки самых разных жанров."
+        },
+      
+        {
+          "id": 5,
+          "user_id": "78",
+          "image":[
+            {
+              "id": 1,
+              "src": "5.1.png"
+            },
+            {
+              "id": 2,
+              "src": "5.2.png"
+            }
+          ],
+          "form": "Parlor",
+          "pickup_configuration": null,
+          "category": "acoustic_guitar",
+          "name": "Aria AP STD-N",
+          "cost": "18000",
+          "description": "Продаю свою акустику, парлор. Гитара в хорошем состоянии, без сколов и трещин."
+        },
+      
+        {
+          "id": 6,
+          "user_id": "78",
+          "image":[
+            {
+              "id": 1,
+              "src": "6.png"
+            }
+          ],
+          "form": "Triple-O",
+          "pickup_configuration": null,
+          "category": "acoustic_guitar",
+          "name": "Takamine EG522C",
+          "cost": "90000",
+          "description": "Продаётся Takamine G Series EG522C Акустическая электрическая классическая гитара, состояние отличное."
+        },
+    
+        {
+          "id": 7,
+          "user_id": "69",
+          "image":[
+            {
+              "id": 1,
+              "src": "7.1.png"
+            },
+            {
+              "id": 2,
+              "src": "7.2.png"
+            }
+          ],
+          "form": "Dreadnought",
+          "pickup_configuration": null,
+          "category": "acoustic_guitar",
+          "name": "Crafter D-6/NC",
+          "cost": "21000",
+          "description": "Верхняя дека – массив ситхинской ели \nНижняя дека и обечайка – красное дерево \nГриф – красное дерево Накладка на гриф – палисандр \nКоличество ладов – 20"
         }
-    ],
-    "types": [
-        {
-            "type_id": 1,
-            "name": "Акустическая гитара"
-        },
-        {
-            "type_id": 2,
-            "name": "Электрогитара"
-        },
-        {
-            "type_id": 3,
-            "name": "Бас-гитара"
-        },
-        {
-            "type_id": 4,
-            "name": "Классическая гитара"
-        },
-        {
-            "type_id": 5,
-            "name": "Укулеле"
-        }
-    ],
-    "categories_types": [
-        {
-            "type_id": 1,
-            "type_name": "Акустическая гитара",
-            "categories": [
-                {
-                    "category_id": 1,
-                    "category_name": "Количество струн"
-                },
-                {
-                    "category_id": 2,
-                    "category_name": "Форма"
-                },
-                {
-                    "category_id": 4,
-                    "category_name": "Вид"
-                }
-            ]
-        },
-        {
-            "type_id": 2,
-            "type_name": "Электрогитара",
-            "categories": [
-                {
-                    "category_id": 1,
-                    "category_name": "Количество струн"
-                },
-                {
-                    "category_id": 2,
-                    "category_name": "Форма"
-                },
-                {
-                    "category_id": 3,
-                    "category_name": "Звукосниматели"
-                }
-            ]
-        },
-        {
-            "type_id": 3,
-            "type_name": "Бас-гитара",
-            "categories": [
-                {
-                    "category_id": 1,
-                    "category_name": "Количество струн"
-                },
-                {
-                    "category_id": 2,
-                    "category_name": "Форма"
-                }
-            ]
-        },
-        {
-            "type_id": 5,
-            "type_name": "Укулеле",
-            "categories": [
-                {
-                    "category_id": 4,
-                    "category_name": "Вид"
-                }
-            ]
-        }
-    ]
-}
-
+]
+    

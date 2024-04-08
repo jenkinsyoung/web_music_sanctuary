@@ -20,7 +20,9 @@
         }
     }
     >.window{
-        display:grid;
+        width: 100%;
+        margin:auto;
+        display: grid;
         overflow: hidden;
         grid-template-rows: repeat(4, 1fr);
         grid-template-columns: repeat(2, 1fr);
