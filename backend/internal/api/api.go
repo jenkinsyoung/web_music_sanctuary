@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	jwt2 "github.com/golang-jwt/jwt/v5"
 	"github.com/gorilla/mux"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/database"
@@ -12,6 +13,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"sync"
 	"time"
 )
 
@@ -112,44 +114,64 @@ func User(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-//TODO: напистаь отправку объявлений по БОЛЬШОЙ категории
-//TODO: api/upload-image написать отправку
-
-func ReceiveImage(w http.ResponseWriter, r *http.Request) {
-	photo := models.Picture{}
-	json.NewDecoder(r.Body).Decode(&photo)
-
-	defer r.Body.Close()
-	//TODO: написать файловую структру для сохраниения картино и присовение им айдишников
-
-	err := imgMethods.SaveImageBase64(photo.Image)
-	if err != nil {
-		log.Printf("Error decode base64 %s", err)
-	}
-}
-
 func CreateAdvertisement(w http.ResponseWriter, r *http.Request) {
 	advertisement := models.Listing{}
-	json.NewDecoder(r.Body).Decode(&advertisement)
+	if err := json.NewDecoder(r.Body).Decode(&advertisement); err != nil {
+		log.Printf("error occured decode json to adv %v", err)
+	}
 
 	defer r.Body.Close()
 
-	//TODO: Здесь должно быть получение данных из МЛ и подгрузка МК и К и тд...
+	idFlow := make(chan int64, len(advertisement.ImgList))
 
-	adID, err := database.DB.NewAdvertisement(&advertisement)
-	if err != nil {
-		log.Printf("Error creating advertisement %s", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+	//var guitarInfo models.Guitar
+
+	var wg sync.WaitGroup
+
+	for id, x := range advertisement.ImgList {
+		// асинхронная загрузка фото в бд и запись их Id в канал
+		wg.Add(1)
+
+		go func(img string) {
+			defer wg.Done()
+			imgMethods.ImgDecode(img, idFlow)
+		}(x.Image)
+
+		// Отправка фото для ML и парсинг в стурктуру с гитарой
+		if id == 0 {
+			wg.Add(1)
+			go func() {
+				//TODO: Написать ссылку для api к ML
+				time.Sleep(time.Second)
+				//url := "SOME URL TO ML API"
+				//
+				//postBody, err := json.Marshal(advertisement.ImgList[0])
+				//if err != nil {
+				//	log.Printf("error marshal img to ml %s", err)
+				//}
+				//responseBody := bytes.NewBuffer(postBody)
+				//resp, err := http.Post(url, "application/json", responseBody)
+				//if err != nil {
+				//	log.Printf("error occured send resp to ml %v", err)
+				//}
+				//defer resp.Body.Close()
+				//json.NewDecoder(resp.Body).Decode(&guitarInfo)
+				defer wg.Done()
+			}()
+		}
 	}
 
-	advertisement.Id = adID
+	wg.Wait()
+	defer close(idFlow)
 
-	database.DB.NewMicrocategories(&advertisement)
+	var idPictureList []int64
 
-	resp, err := json.Marshal(NewAdvertisementResponse{advertisement.Id})
-	_, err = w.Write(resp)
+	// TODO: тут можешь сделать автоматическое добавление данных (асинх в бдху, тк айди прилетает на канал)
+	for range advertisement.ImgList {
+		idPictureList = append(idPictureList, <-idFlow)
+	}
 
+	fmt.Println(idPictureList)
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -171,31 +193,30 @@ func GetAdvertisement(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func GetAllAdvertisements(w http.ResponseWriter, r *http.Request) {
-	advertisements, err := database.DB.GetListings()
-	if err != nil {
-		log.Printf("could not select advertisements from db %s", err)
-	}
-
-	resp, err := json.Marshal(AllAdvertisements{Advertisements: advertisements})
-
-	_, err = w.Write(resp)
-
-	w.WriteHeader(http.StatusOK)
-
-}
+//func GetAllAdvertisements(w http.ResponseWriter, r *http.Request) {
+//	//advertisements, err := database.DB.GetListings()
+//	//if err != nil {
+//	//	log.Printf("could not select advertisements from db %s", err)
+//	}
+//
+//	//resp, err := json.Marshal(AllAdvertisements{Advertisements: advertisements})
+//	//
+//	//_, err = w.Write(resp)
+//
+//	w.WriteHeader(http.StatusOK)
+//
+//}
 
 func SetupRoutes() http.Handler {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/api/sign-up", Register).Methods("POST")
 	router.HandleFunc("/api/sign-in", Authorization).Methods("POST")
-	router.HandleFunc("/api/save-image", ReceiveImage).Methods("POST")
 	router.HandleFunc("/api/create-ad", CreateAdvertisement).Methods("POST")
 
 	router.HandleFunc("/api/user", User).Methods("GET")
 	router.HandleFunc("/api/get-ad/{id}", GetAdvertisement).Methods("GET")
-	router.HandleFunc("/api/get-ads", GetAllAdvertisements).Methods("GET")
+	//router.HandleFunc("/api/get-ads", GetAllAdvertisements).Methods("GET")
 
 	return router
 }

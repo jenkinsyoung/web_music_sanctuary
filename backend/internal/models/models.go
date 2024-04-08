@@ -7,6 +7,8 @@ type Listing struct {
 	GuitarName  string `json:"guitar_name"`
 	Cost        int64  `json:"cost"`
 	Description string `json:"description"`
+
+	ImgList []ImgJSON `json:"img_list"`
 }
 
 type User struct {
@@ -22,6 +24,10 @@ type User struct {
 type Picture struct {
 	Id    int64  `json:"id"`
 	Image []byte `json:"image"`
+}
+
+type ImgJSON struct {
+	Image string `json:"image"`
 }
 
 type Guitar struct {

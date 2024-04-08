@@ -30,6 +30,15 @@ func (c *DBConnection) GetUserInfo(email string) models.User {
 	return user
 }
 
+func (c *DBConnection) ImgInsert(img []byte) int64 {
+	var id int64
+	err := c.db.QueryRow(`INSERT INTO "picture" (image) VALUES ($1) RETURNING id`, img).Scan(&id)
+	if err != nil {
+		log.Printf("Error inserting img to db %s", err)
+	}
+	return id
+}
+
 //func (c *DBConnection) NewListing(ad *models.Listing) (int64, error) {
 //	var listingID int64
 //	query := fmt.Sprintf(`INSERT INTO "listing" (user_id, guitar_id, name, cost, description) VALUES ($1, $2, $3, $4, $5) RETURNING id`)

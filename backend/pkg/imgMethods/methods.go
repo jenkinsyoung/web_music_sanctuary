@@ -1,22 +1,15 @@
 package imgMethods
 
 import (
-	"crypto/md5"
 	"encoding/base64"
-	"fmt"
-	"os"
+	"github.com/jenkinsyoung/web_music_sanctuary/internal/database"
+	"log"
 )
 
-func SaveImageBase64(encodedString string) error {
+func ImgDecode(encodedString string, idFlow chan int64) {
 	decoded, err := base64.StdEncoding.DecodeString(encodedString)
 	if err != nil {
-		return err
+		log.Printf("error decode image %s", err)
 	}
-	filename := fmt.Sprintf("%x.jpeg", md5.Sum(decoded))
-	err = os.WriteFile(filename, decoded, 0644)
-	if err != nil {
-		return err
-	}
-	return nil
-	//TODO: Написать получение айдишника и создание папки с этим айдишником объявления
+	idFlow <- database.DB.ImgInsert(decoded)
 }
