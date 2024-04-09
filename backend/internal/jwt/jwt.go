@@ -17,7 +17,7 @@ type TokenClaims struct {
 var SigningKey = os.Getenv("SECRET_KEY")
 
 func GenerateToken(email, password string) (string, error) {
-	userID := database.DB.GetUserInfo(email).Id
+	userID := database.DB.GetUserInfoByEmail(email).Id
 	fmt.Println("from jwt", password)
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, &TokenClaims{
 		jwt.MapClaims{

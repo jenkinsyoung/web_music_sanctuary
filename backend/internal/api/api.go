@@ -3,11 +3,8 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	jwt2 "github.com/golang-jwt/jwt/v5"
 	"github.com/gorilla/mux"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/database"
-	"github.com/jenkinsyoung/web_music_sanctuary/internal/hash"
-	"github.com/jenkinsyoung/web_music_sanctuary/internal/jwt"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/models"
 	"github.com/jenkinsyoung/web_music_sanctuary/pkg/imgMethods"
 	"log"
@@ -17,104 +14,7 @@ import (
 	"time"
 )
 
-func Register(w http.ResponseWriter, r *http.Request) {
-	user := models.User{}
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		log.Printf("Error parsing json: %s", err)
-	}
-
-	user.Password = hash.PasswordHash(user.Password)
-
-	id, err := database.DB.CreateUser(&user)
-	if err != nil {
-		log.Printf("error creating user: %s", err)
-		w.WriteHeader(http.StatusConflict)
-		return
-	}
-
-	token, err := jwt.GenerateToken(user.Email, user.Password)
-	if err != nil {
-		log.Printf("error generating access token: %s", err)
-	}
-
-	resp, err := json.Marshal(TokenResponse{UserID: int64(id), AccessToken: token})
-	if err != nil {
-		log.Printf("error marshalling json: %s", err)
-	}
-
-	_, err = w.Write(resp)
-	if err != nil {
-		log.Printf("error sending response: %s", err)
-	}
-
-	w.WriteHeader(http.StatusOK)
-}
-
-func Authorization(w http.ResponseWriter, r *http.Request) {
-	user := models.User{}
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		log.Printf("Error parsing json: %s", err)
-	}
-	userInfo := database.DB.GetUserInfo(user.Email)
-	if !hash.CheckPassword(user.Password, userInfo.Password) {
-		w.WriteHeader(http.StatusNotFound)
-		return
-	}
-	token, err := jwt.GenerateToken(user.Email, user.Password)
-	if err != nil {
-		log.Printf("error generating access token: %s", err)
-	}
-
-	cookie := &http.Cookie{
-		Name:     "jwt",
-		Value:    token,
-		Expires:  time.Now().Add(time.Hour * 24 * 7),
-		HttpOnly: true,
-		Secure:   true,
-	}
-
-	http.SetCookie(w, cookie)
-
-	resp, err := json.Marshal(TokenResponse{UserID: userInfo.Id, AccessToken: token})
-	if err != nil {
-		log.Printf("error marshalling json: %s", err)
-	}
-
-	_, err = w.Write(resp)
-	if err != nil {
-		log.Printf("error sending response: %s", err)
-	}
-	w.WriteHeader(http.StatusOK)
-}
-
-func User(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("jwt")
-	if err != nil {
-		log.Printf("error getting cookie %s", err)
-	}
-
-	token, err := jwt2.ParseWithClaims(cookie.String(), &jwt2.MapClaims{}, func(token *jwt2.Token) (interface{}, error) {
-		return []byte(jwt.SigningKey), nil
-	})
-
-	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-
-	resp, err := json.Marshal(token.Claims)
-	if err != nil {
-		log.Printf("error marshalling json: %s", err)
-	}
-
-	_, err = w.Write(resp)
-	if err != nil {
-		log.Printf("error sending response: %s", err)
-	}
-	w.WriteHeader(http.StatusOK)
-}
-
-func CreateAdvertisement(w http.ResponseWriter, r *http.Request) {
+func CreateListing(w http.ResponseWriter, r *http.Request) {
 	advertisement := models.Listing{}
 	if err := json.NewDecoder(r.Body).Decode(&advertisement); err != nil {
 		log.Printf("error occured decode json to adv %v", err)
@@ -175,7 +75,7 @@ func CreateAdvertisement(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func GetAdvertisement(w http.ResponseWriter, r *http.Request) {
+func GetListing(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil {
 		log.Printf("not valid id")
@@ -196,7 +96,7 @@ func GetAdvertisement(w http.ResponseWriter, r *http.Request) {
 //func GetAllAdvertisements(w http.ResponseWriter, r *http.Request) {
 //	//advertisements, err := database.DB.GetListings()
 //	//if err != nil {
-//	//	log.Printf("could not select advertisements from db %s", err)
+//	//	log.Printf("could not select advertisements ;from db %s", err)
 //	}
 //
 //	//resp, err := json.Marshal(AllAdvertisements{Advertisements: advertisements})
@@ -212,11 +112,15 @@ func SetupRoutes() http.Handler {
 
 	router.HandleFunc("/api/sign-up", Register).Methods("POST")
 	router.HandleFunc("/api/sign-in", Authorization).Methods("POST")
-	router.HandleFunc("/api/create-ad", CreateAdvertisement).Methods("POST")
 
-	router.HandleFunc("/api/user", User).Methods("GET")
-	router.HandleFunc("/api/get-ad/{id}", GetAdvertisement).Methods("GET")
+	router.HandleFunc("/api/get-listing/{id}", GetListing).Methods("GET")
 	//router.HandleFunc("/api/get-ads", GetAllAdvertisements).Methods("GET")
+
+	authGroup := router.PathPrefix("/api/user").Subrouter()
+	authGroup.Use(Authentication)
+	authGroup.HandleFunc("/create-listing", CreateListing).Methods("POST")
+	authGroup.HandleFunc("/profile", GetProfile).Methods("GET")
+	authGroup.HandleFunc("/listings", GetListingsForUser).Methods("GET")
 
 	return router
 }
