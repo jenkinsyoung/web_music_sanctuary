@@ -21,7 +21,7 @@ classes = [
     ('telecaster', 'guitar_form', 'electric'), 
     ('triple-o', 'guitar_form', 'acoustic')
 ]
-source = 'src/yolov9/runs/detect/exp4/labels/image.txt'
+source = 'src/yolov9/runs/detect/exp/labels/image.txt'
 
 def parsepred() -> dict:
     res = {}
@@ -29,11 +29,14 @@ def parsepred() -> dict:
     
     with open(source) as f:
         for line in f:
-            classid, coef1, coef2, coef3, coef4 = line.split()
             try:
-                detections[int(classid)] = max(detections[int(classid)], (coef1, coef2, coef3, coef4), key=lambda x: x[1])
+                classid, coef1, coef2, _, _, _  = line.split()
+            except ValueError: # handling new line at the end of file
+                continue
+            try:
+                detections[int(classid)] = max(detections[int(classid)], (coef1, coef2), key=lambda x: x[1])
             except Exception:
-                detections[int(classid)] = (coef1, coef2, coef3, coef4)
+                detections[int(classid)] = (coef1, coef2)
                 
     with open('src/yolov9/runs/detect/exp/labels/image.txt', 'w') as f:
         f.write('')
@@ -43,8 +46,11 @@ def parsepred() -> dict:
             res[classes[d][1]] = max((d, detections[d][1]), res[classes[d][1]], key= lambda x: x[1])
         except Exception:
             res[classes[d][1]] = (d, detections[d][1])
-            
-    res['category'] = classes[res['guitar_form'][0]][2]
+    # example: {7: ('0.298438', '0.617708'), 18: ('0.275781', '0.625')}
+    try:
+        res['category'] = classes[res['guitar_form'][0]][2]
+    except KeyError:
+        pass
         
     for k, v in res.items(): # example: {'guitar_form': (18, '0.51875'), 'pickup_config': (7, '0.626042')}
         if k == 'category': continue
