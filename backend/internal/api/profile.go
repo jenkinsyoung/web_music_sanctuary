@@ -31,7 +31,7 @@ func GetListingsForUser(w http.ResponseWriter, r *http.Request) {
 			log.Printf("error getting listings from db %s", err)
 			w.WriteHeader(http.StatusInternalServerError)
 		}
-		resp, err := json.Marshal(listings)
+		resp, err := json.Marshal(AllListings{Listings: listings})
 		if err != nil {
 			log.Printf("error marshalling user info %s", err)
 			w.WriteHeader(http.StatusInternalServerError)

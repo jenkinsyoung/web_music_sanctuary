@@ -2,7 +2,6 @@ package database
 
 import (
 	"fmt"
-	"github.com/jenkinsyoung/web_music_sanctuary/internal/api"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/models"
 	"log"
 )
@@ -37,8 +36,8 @@ func (c *DBConnection) GetUserInfoByID(userID int64) models.User {
 	return user
 }
 
-func (c *DBConnection) GetUserListings(userID int64) (api.AllListings, error) {
-	var res api.AllListings
+func (c *DBConnection) GetUserListings(userID int64) ([]models.Listing, error) {
+	var res []models.Listing
 
 	rows, err := c.db.Query(`SELECT * FROM "listing" WHERE user_id=$1`, userID)
 	if err != nil {
@@ -52,7 +51,7 @@ func (c *DBConnection) GetUserListings(userID int64) (api.AllListings, error) {
 			&listing.GuitarId, &listing.GuitarName, &listing.Cost, listing.Description); err != nil {
 			return res, err
 		}
-		res.Listings = append(res.Listings, listing)
+		res = append(res, listing)
 	}
 
 	return res, nil
