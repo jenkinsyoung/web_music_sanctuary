@@ -17,12 +17,12 @@ class Server(BaseHTTPRequestHandler):
     def do_HEAD(self):
         self._set_headers()
         
-    # GET sends back a Hello world message
+   
     def do_GET(self):
         self._set_headers()
         self.wfile.write(json.dumps({'hello': 'world', 'received': 'ok'}))
         
-    # POST echoes the message adding a JSON field
+    
     def do_POST(self):
         ctype, pdict = cgi.parse_header(self.headers.get('content-type'))
         
@@ -41,15 +41,11 @@ class Server(BaseHTTPRequestHandler):
         opt = {
             "device": 0,
             "save_txt": True,
-            "weights": "src/yolov9/gelan-c.pt",
+            "weights": "src/yolov9/runs/train/yolov9-c8/weights/best.pt",
             "source": 'src/yolov9/data/images/image.png',
             "exist_ok": True
         }
         detect.main(opt)
-        try:
-            del message["image"]
-        except KeyError:
-            pass
         responce = parsepred()
         # send the message back
         self._set_headers()
