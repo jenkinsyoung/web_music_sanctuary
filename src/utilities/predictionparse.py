@@ -56,6 +56,3 @@ def parsepred() -> dict:
         res['pickup_config'] = None
     
     return res
-
-
-print(parsepred())
