@@ -1,12 +1,16 @@
 import styles from './ProductPage.module.scss'
 import Image from 'next/image'
 import Link from 'next/link'
+import { getAllData } from '@/utils/DataFetching'
 
-const ProductPage =()=>{
+
+const ProductPage = async ()=>{
+    const products = await getAllData()
+    console.log(products)
     return(
         <div className={styles.container}>
             <div className={styles.first_line}>
-                <Link href={`/products/acoustic_guitar`}>
+                <Link href={`/products/Acoustic`}>
                 <div className={styles.acoustic}>
                     <h1>acoustic guitar</h1>
                     <Image priority
@@ -16,7 +20,7 @@ const ProductPage =()=>{
                     height={445.28}/> 
                 </div>
                 </Link>
-                <Link href={`/products/electric_guitar`}>
+                <Link href={`/products/Electric`}>
                 <div className={styles.electric}>
                     <h1>electric guitar</h1>
                     <Image priority
@@ -29,7 +33,7 @@ const ProductPage =()=>{
                 </Link>
             </div>
             <div className={styles.second_line}>
-            <Link href={`/products/bass_guitar`}>
+            <Link href={`/products/bass`}>
                 <div className={styles.bass}>
                         <h1>bass guitar</h1>
                         <Image priority
@@ -39,7 +43,7 @@ const ProductPage =()=>{
                         height={433}/> 
                 </div>
             </Link>
-            <Link href={`/products/classical_guitar`}>
+            <Link href={`/products/classical`}>
                 <div className={styles.classic}>
                     <h1>classical guitar</h1>
                     <Image priority

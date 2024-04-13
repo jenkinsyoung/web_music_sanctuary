@@ -9,9 +9,11 @@ import FormAcoustic from '@/components/FormAcoustic'
 import FormElectro from '@/components/FormElectro'
 import Pickups from '@/components/Pickups'
 import products  from '@/utils/data.json'
-import { getVisibleProduct, getVisibleProductByForm, getVisibleProductByPick } from '@/services/product-queries'
+// import {products }from '../page'
+import { getVisibleProductByForm, getVisibleProductByPick } from '@/services/product-queries'
 
-const ProductsByCategoryPage = ({params} : any) =>{
+
+const ProductsByCategoryPage = async ({params} : any) =>{
     const path = usePathname();
     const filter = path.split('/')[2];
     const current = products.filter((product:any)=>(
@@ -55,9 +57,9 @@ const ProductsByCategoryPage = ({params} : any) =>{
             </div>
             <div className={styles.filters}>
                 <PriceFilter min={minPrice} max ={maxPrice}/>
-                {filter == 'acoustic_guitar' ? <FormAcoustic currentForm = {currentForm} onChangeCategory={onChangeCategoryHandler}/> : ''}
-                {filter == 'electric_guitar' ? <FormElectro currentForm = {currentForm} onChangeCategory={onChangeCategoryHandler}/> : ''}
-                {filter == 'electric_guitar' ? <Pickups currentForm = {currentForm} onChangeCategory={onChangeCategoryHandler}/> : ''}
+                {filter == 'Acoustic' ? <FormAcoustic currentForm = {currentForm} onChangeCategory={onChangeCategoryHandler}/> : ''}
+                {filter == 'Electric' ? <FormElectro currentForm = {currentForm} onChangeCategory={onChangeCategoryHandler}/> : ''}
+                {filter == 'Electric' ? <Pickups currentForm = {currentForm} onChangeCategory={onChangeCategoryHandler}/> : ''}
             </div>
 
             <div className={styles.wrapper}>
