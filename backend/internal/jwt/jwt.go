@@ -5,26 +5,33 @@ import (
 	"fmt"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/database"
+	"github.com/jenkinsyoung/web_music_sanctuary/internal/hash"
 	"os"
 	"time"
 )
 
 type TokenClaims struct {
-	jwt.Claims
+	jwt.MapClaims
 	UserId int64 `json:"user_id"`
 }
 
 var SigningKey = os.Getenv("SECRET_KEY")
 
 func GenerateToken(email, password string) (string, error) {
-	userID := database.DB.GetUserInfoByEmail(email).Id
-	fmt.Println("from jwt", password)
+	user, err := database.DB.GetUserInfoByEmail(email)
+	if err != nil {
+		return "", err
+	}
+	if !hash.CheckPassword(password, user.Password) {
+		return "", errors.New("wrong password")
+	}
+
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, &TokenClaims{
 		jwt.MapClaims{
 			"ExpiresAt": time.Now().Add(time.Hour * 24 * 7).Unix(),
 			"IssuedAt":  time.Now().Unix(),
 		},
-		userID,
+		user.Id,
 	})
 
 	token, err := t.SignedString([]byte(SigningKey))
@@ -35,7 +42,8 @@ func GenerateToken(email, password string) (string, error) {
 }
 
 func ParseToken(accessToken string) (int64, error) {
-	token, err := jwt.Parse(accessToken, func(token *jwt.Token) (i interface{}, err error) {
+	claims := &TokenClaims{}
+	token, err := jwt.ParseWithClaims(accessToken, claims, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("invalid signing method")
 		}
@@ -46,7 +54,13 @@ func ParseToken(accessToken string) (int64, error) {
 		return 0, err
 	}
 
+	fmt.Println(token, "\n")
+
 	claims, ok := token.Claims.(*TokenClaims)
+	fmt.Println(claims)
+	//for id, i := range claims{
+	//	fmt.Println(id, i)
+	//}
 	if !ok {
 		return 0, errors.New("error in token claims")
 	}

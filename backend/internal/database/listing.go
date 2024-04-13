@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/models"
 )
 
@@ -48,4 +49,25 @@ func (c *DBConnection) GetListings() ([]models.Listing, error) {
 	}
 
 	return listings, nil
+}
+
+func (c *DBConnection) CreateGuitar(guitar models.Guitar) (int64, error) {
+	var guitarID int64
+	query := fmt.Sprintf(`INSERT INTO "guitar" (form, pickup_config, category) VALUES ($1, $2, $3) RETURNING id`)
+
+	err := c.db.QueryRow(query, guitar.Form, guitar.PickupConfig, guitar.Category).Scan(&guitarID)
+	return guitarID, err
+}
+
+func (c *DBConnection) CreateListing(listing models.Listing, guitarID, userID int64) (int64, error) {
+	var listingID int64
+	err := c.db.QueryRow(`INSERT INTO "listing" (user_id, guitar_id, name, cost, description) VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+		userID, guitarID, listing.GuitarName, listing.Cost, listing.Description).Scan(&listingID)
+
+	return listingID, err
+}
+
+func (c *DBConnection) ImageListingCompound(listingID, imgID int64) {
+	fmt.Println(imgID)
+	c.db.QueryRow(`INSERT INTO "listing_pictures" (listing_id, picture_id) VALUES ($1, $2)`, listingID, imgID)
 }

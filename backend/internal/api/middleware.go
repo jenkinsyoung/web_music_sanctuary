@@ -13,19 +13,19 @@ func Authentication(next http.Handler) http.Handler {
 		headerParts := strings.Split(r.Header.Get("Authorization"), " ")
 		if len(headerParts) != 2 || headerParts[0] != "Bearer" {
 			log.Printf("invalid auth header")
-			w.WriteHeader(http.StatusUnauthorized)
+			http.Error(w, "Invalid token", http.StatusUnauthorized)
 			return
 		}
 
 		if len(headerParts[1]) == 0 {
-			log.Printf("token is empty")
-			w.WriteHeader(http.StatusUnauthorized)
+			http.Error(w, "Invalid token", http.StatusUnauthorized)
 			return
 		}
 
 		claims, err := jwt.ParseToken(headerParts[1])
 		if err != nil {
-			w.WriteHeader(http.StatusForbidden)
+			http.Error(w, "Invalid token", http.StatusForbidden)
+			return
 		}
 		ctx := context.WithValue(context.Background(), "userId", claims)
 		next.ServeHTTP(w, r.WithContext(ctx))
