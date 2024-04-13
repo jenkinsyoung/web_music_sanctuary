@@ -75,3 +75,24 @@ func GetListingsForUser(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 }
+
+//func UpdateListing(w http.ResponseWriter, r *http.Request) {
+//	if userID, ok := r.Context().Value("userId").(int64); ok {
+//
+//		if err != nil {
+//			log.Printf("error getting listings from db %s", err)
+//			w.WriteHeader(http.StatusInternalServerError)
+//		}
+//		resp, err := json.Marshal(AllListings{Listings: listings})
+//		if err != nil {
+//			log.Printf("error marshalling user info %s", err)
+//			w.WriteHeader(http.StatusInternalServerError)
+//		}
+//
+//		w.Write(userID)
+//		w.WriteHeader(http.StatusOK)
+//	} else {
+//		log.Printf("wrong type of payload")
+//		w.WriteHeader(http.StatusBadRequest)
+//	}
+//}

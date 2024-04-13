@@ -30,7 +30,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	//	log.Printf("error generating access token: %s", err)
 	//}
 
-	resp, err := json.Marshal(UserCreatedResponse{UserID: int64(id)})
+	resp, err := json.Marshal(UserCreatedResponse{UserID: id})
 	if err != nil {
 		log.Printf("error marshalling json: %s", err)
 	}

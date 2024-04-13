@@ -51,26 +51,50 @@ func (c *DBConnection) GetUserInfoByID(userID int64) models.User {
 	return user
 }
 
-func (c *DBConnection) GetUserListings(userID int64) ([]models.Listing, error) {
-	var res []models.Listing
+func (c *DBConnection) GetUserListings(userID int64) ([]models.ListingFullInfo, error) {
+	var listings []models.ListingFullInfo
 
 	rows, err := c.db.Query(`SELECT * FROM "listing" WHERE user_id=$1`, userID)
 	if err != nil {
-		return res, err
+		return listings, err
 	}
 	defer rows.Close()
 
 	for rows.Next() {
-		var listing models.Listing
+		var listing models.ListingFullInfo
 		if err := rows.Scan(&listing.Id, &listing.UserId,
-			&listing.GuitarId, &listing.GuitarName, &listing.Cost, listing.Description); err != nil {
-			return res, err
+			&listing.GuitarId, &listing.GuitarName, &listing.Cost, &listing.Description); err != nil {
+			return listings, err
 		}
-		res = append(res, listing)
+
+		guitarInfo, err := c.GetGuitarInfo(listing.GuitarId)
+		if err != nil {
+			return nil, err
+		}
+
+		listing.Form = guitarInfo.Form
+		listing.PickupConfig = guitarInfo.PickupConfig
+		listing.Category = guitarInfo.Category
+
+		listing.ImgList, err = c.GetListingImages(listing.Id)
+
+		if err != nil {
+			return listings, err
+		}
+
+		listings = append(listings, listing)
 	}
 
-	return res, nil
+	return listings, nil
 }
+
+//func (c *DBConnection) IsUsersListing(userID, listingID int64) error {
+//
+//}
+//
+//func (c *DBConnection) UpdateListing(userID int64, listing models.Listing) error {
+//
+//}
 
 func (c *DBConnection) UpdateUserInfo(user models.User) error {
 	err := c.db.QueryRow(`UPDATE "user" SET 

@@ -125,6 +125,8 @@ func GetListing(w http.ResponseWriter, r *http.Request) {
 
 func GetAllListings(w http.ResponseWriter, r *http.Request) {
 
+	fmt.Println("настя сделала запросик")
+
 	listings, err := database.DB.GetListings()
 	if err != nil {
 		log.Printf("error getting listings from db %s", err)

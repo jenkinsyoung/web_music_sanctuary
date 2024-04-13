@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/models"
@@ -30,8 +31,8 @@ func (c *DBConnection) GetListingByID(id int64) (models.Listing, error) {
 	return listing, nil
 }
 
-func (c *DBConnection) GetListings() ([]models.Listing, error) {
-	var listings []models.Listing
+func (c *DBConnection) GetListings() ([]models.ListingFullInfo, error) {
+	var listings []models.ListingFullInfo
 
 	rows, err := c.db.Query(`SELECT * FROM "listing"`)
 	if err != nil {
@@ -40,15 +41,78 @@ func (c *DBConnection) GetListings() ([]models.Listing, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var listing models.Listing
+		var listing models.ListingFullInfo
 		if err := rows.Scan(&listing.Id, &listing.UserId,
-			&listing.GuitarId, &listing.GuitarName, &listing.Cost, listing.Description); err != nil {
+			&listing.GuitarId, &listing.GuitarName, &listing.Cost, &listing.Description); err != nil {
 			return listings, err
 		}
+
+		guitarInfo, err := c.GetGuitarInfo(listing.GuitarId)
+		if err != nil {
+			return nil, err
+		}
+
+		listing.Form = guitarInfo.Form
+		listing.PickupConfig = guitarInfo.PickupConfig
+		listing.Category = guitarInfo.Category
+
+		listing.ImgList, err = c.GetListingImages(listing.Id)
+
+		if err != nil {
+			return listings, err
+		}
+
 		listings = append(listings, listing)
 	}
 
 	return listings, nil
+}
+
+func (c *DBConnection) GetGuitarInfo(guitarID int64) (models.Guitar, error) {
+	var guitar models.Guitar
+
+	if err := c.db.QueryRow(`SELECT * FROM "guitar" WHERE id=$1`, guitarID).Scan(&guitar.Id, &guitar.Form,
+		&guitar.PickupConfig, &guitar.Category); err != nil {
+		if err == sql.ErrNoRows {
+			return guitar, errors.New("guitar with this id does not exist")
+		}
+		return guitar, errors.New("error getting guitar using id")
+	}
+
+	return guitar, nil
+}
+
+func (c *DBConnection) GetListingImages(listingID int64) ([]models.ImgJSON, error) {
+	var images []models.ImgJSON
+
+	rows, err := c.db.Query(`SELECT picture_id FROM "listing_pictures" WHERE listing_id=$1`, listingID)
+	if err == sql.ErrNoRows {
+		return images, nil
+	}
+
+	if err != nil {
+		return images, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var image []byte
+		var imgID int64
+		if err := rows.Scan(&imgID); err != nil {
+			return images, err
+		}
+
+		err := c.db.QueryRow(`SELECT image FROM "picture" WHERE id=$1`, imgID).Scan(&image)
+
+		if err != nil {
+			return images, errors.New("picture with this id does not exist")
+		}
+
+		images = append(images, models.ImgJSON{Image: base64.StdEncoding.EncodeToString(image)})
+
+	}
+
+	return images, nil
 }
 
 func (c *DBConnection) CreateGuitar(guitar models.Guitar) (int64, error) {

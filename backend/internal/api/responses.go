@@ -16,5 +16,5 @@ type NewListingResponse struct {
 }
 
 type AllListings struct {
-	Listings []models.Listing `json:"listings"`
+	Listings []models.ListingFullInfo `json:"listings"`
 }
