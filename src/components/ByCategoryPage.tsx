@@ -11,7 +11,7 @@ import { getVisibleProductByForm, getVisibleProductByPick } from '@/services/pro
 
 
 export const ByCategoryPage=({params}:any)=>{
-    const {products} = params
+    const products = params
     const path = usePathname();
     const filter = path.split('/')[2];
     const current = products.filter((product:any)=>(
