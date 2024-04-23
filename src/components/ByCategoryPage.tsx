@@ -1,4 +1,3 @@
-
 "use client"
 import Product from '@/ui/Product'
 import { useState } from 'react'
