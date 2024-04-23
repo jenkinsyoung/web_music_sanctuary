@@ -7,7 +7,7 @@ const ProductsByCategoryPage = async ({params} : any) =>{
     const products = await getAllData()
     
     return (
-        <ByCategoryPage products={products} />
+        <ByCategoryPage params={products} />
     )
 }
 

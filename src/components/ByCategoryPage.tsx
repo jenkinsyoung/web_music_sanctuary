@@ -11,8 +11,8 @@ import Pickups from '@/components/Pickups'
 import { getVisibleProductByForm, getVisibleProductByPick } from '@/services/product-queries'
 
 
-export const ByCategoryPage=(products:any)=>{
-  
+export const ByCategoryPage=({params}:any)=>{
+    const {products} = params
     const path = usePathname();
     const filter = path.split('/')[2];
     const current = products.filter((product:any)=>(
