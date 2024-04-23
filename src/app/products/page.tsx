@@ -3,9 +3,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { getAllData } from '@/utils/DataFetching'
 
-
+export const products = getAllData()
 const ProductPage = async ()=>{
-    const products = await getAllData()
+    
     console.log(products)
     return(
         <div className={styles.container}>
