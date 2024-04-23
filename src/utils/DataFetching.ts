@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const URL = 'http://192.168.137.243:8082/api/'
+const URL = 'http://192.168.100.43:8082/api'
 //get запросы
 export const getAllData = async() =>{
     try{
-        const response = await axios.get(`${URL}listings`)
+        const response = await axios.get(`${URL}/listings`)
         return response.data
     } catch (err: any){
         console.error(err.toJSON())
