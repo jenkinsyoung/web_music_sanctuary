@@ -5,7 +5,7 @@ const Product = ({product} : any) => {
     return (
         <div className={styles.container}>
             <h1>{product.guitar_name}</h1>
-            {product.imag_list.length != 0 ? <div className={styles.img} style={{backgroundImage: `url(/${product.imag_list[0].image})`}} />:<></>}
+            {product.img_list.length != 0 ? <div className={styles.img} style={{backgroundImage: `url(/${product.img_list[0].image})`}} />:<></>}
             
             <div className={styles.tags}>#{product.pickup_config} #{product.guitar_form}</div>
             <div className={styles.cost}><p>Цена:</p><span>{product.cost} ₽</span></div>
