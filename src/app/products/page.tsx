@@ -33,7 +33,7 @@ const ProductPage = async ()=>{
                 </Link>
             </div>
             <div className={styles.second_line}>
-            <Link href={`/products/bass`}>
+            <Link href={`/not-found`}>
                 <div className={styles.bass}>
                         <h1>bass guitar</h1>
                         <Image priority
@@ -43,7 +43,7 @@ const ProductPage = async ()=>{
                         height={433}/> 
                 </div>
             </Link>
-            <Link href={`/products/classical`}>
+            <Link href={`/not-found`}>
                 <div className={styles.classic}>
                     <h1>classical guitar</h1>
                     <Image priority
@@ -54,7 +54,7 @@ const ProductPage = async ()=>{
                     /> 
                 </div>
             </Link>
-            <Link href={`/products/ukulele`}>
+            <Link href={`/not-found`}>
                 <div className={styles.ukulele}>
                         <h1>ukulele</h1>
                         <Image priority
