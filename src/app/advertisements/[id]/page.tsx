@@ -1,7 +1,6 @@
 "use client"
 import styles from './AdvertisementsByIDPage.module.scss'
 import Slider from '@/components/Slider'
-import Product from '@/ui/Product'
 import { usePathname } from 'next/navigation'
 import data from '@/utils/data.json'
 const AdvertisementsByIDPage = ({params} : any) =>{

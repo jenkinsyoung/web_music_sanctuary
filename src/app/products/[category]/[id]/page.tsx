@@ -1,13 +1,11 @@
-"use client"
 import styles from './ProductByIDPage.module.scss'
 import Slider from '@/components/Slider'
 import Product from '@/ui/Product'
-import { usePathname } from 'next/navigation'
-import data from '@/utils/data.json'
-const ProductsByIDPage = ({params} : any) =>{
-    const path = usePathname();
-    const id = Number(path.split('/')[3]);
-    const product = data[id]
+import { getAllData, getProductById } from '@/utils/DataFetching'
+const ProductsByIDPage = async ({params} : any) =>{
+    const {id} = params
+    const product = await getProductById(id)
+    const products = await getAllData()
     return (
         <div className={styles.container}>
             <div className={styles.info}>
@@ -28,10 +26,10 @@ const ProductsByIDPage = ({params} : any) =>{
                 <h2>Контакты:</h2>
             </div>
             <div className={styles.wrapper}>
-                <Product product={data[0]}/>
-                <Product product={data[1]} />
-                <Product product={data[3]}/>
-                <Product product={data[4]}/>
+                <Product product={products.listings[0]}/>
+                <Product product={products.listings[1]} />
+                <Product product={products.listings[3]}/>
+                <Product product={products.listings[4]}/>
             </div>
         </div>
     )
