@@ -18,7 +18,7 @@ import styles from './Slider.module.scss'
 // ]
 
 const Slider = ({product} : any) =>{
-    const image = product.image
+    const image = product.img_list
     console.log(image)
     const [currentIndex, setCurrentIndex]= useState(0)
 
@@ -28,7 +28,7 @@ const Slider = ({product} : any) =>{
         borderRadius: '10px',
         backgroundPosition: 'center',
         backgroundSize:'cover',
-        backgroundImage: `url(/${image[currentIndex].src})`,
+        backgroundImage: `url(data:image/png;base64,${image[currentIndex].image})`,
         margin: 'auto',
         transition: '0.5s'
     }
