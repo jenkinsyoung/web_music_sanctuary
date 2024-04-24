@@ -1,7 +1,24 @@
+"use client"
 import React from 'react'
 import styles from './CreatePage.module.scss'
 import UploadImage from '@/components/UploadImage'
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
 const CreatePage = () => {
+    const router = useRouter();
+
+    useEffect(() => {
+      const checkToken = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          router.push('/register');
+        }
+      };
+  
+      checkToken();
+    }, []);
+    
   return (
    
         <div className={styles.container}>
