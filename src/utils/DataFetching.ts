@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = 'http://192.168.100.43:8082/api'
+const URL = 'http://127.0.0.1:8082/api'
 //get запросы
 export const getAllData = async() =>{
     try{
@@ -13,7 +13,7 @@ export const getAllData = async() =>{
 
 export const getProductById = async(ID:number) =>{
     try{
-        const response = await axios.get(`${URL}?id=${ID}`)
+        const response = await axios.get(`${URL}/listing?id=${ID}`)
         return response.data
     } catch (err: any){
         console.error(err.toJSON())
