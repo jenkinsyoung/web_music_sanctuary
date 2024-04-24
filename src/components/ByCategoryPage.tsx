@@ -13,7 +13,7 @@ import { getVisibleProductByForm, getVisibleProductByPick } from '@/services/pro
 export const ByCategoryPage=({products}:any)=>{
     const path = usePathname();
     const filter = path.split('/')[2];
-    const current = products.params.listings.filter((product:any)=>(
+    const current = products.listings.filter((product:any)=>(
         product.category === filter
     ))
     
