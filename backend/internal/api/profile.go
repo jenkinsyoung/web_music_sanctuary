@@ -78,18 +78,21 @@ func GetListingsForUser(w http.ResponseWriter, r *http.Request) {
 
 //func UpdateListing(w http.ResponseWriter, r *http.Request) {
 //	if userID, ok := r.Context().Value("userId").(int64); ok {
-//
-//		if err != nil {
-//			log.Printf("error getting listings from db %s", err)
-//			w.WriteHeader(http.StatusInternalServerError)
+//		listing := models.Listing{}
+//		if err := json.NewDecoder(r.Body).Decode(&listing); err != nil {
+//			log.Printf("error occured decode json to adv %v", err)
 //		}
+//		defer r.Body.Close()
+//
+//		err := database.DB.UpdateListing(userID, listing)
+//
 //		resp, err := json.Marshal(AllListings{Listings: listings})
 //		if err != nil {
 //			log.Printf("error marshalling user info %s", err)
 //			w.WriteHeader(http.StatusInternalServerError)
 //		}
 //
-//		w.Write(userID)
+//		w.Write(resp)
 //		w.WriteHeader(http.StatusOK)
 //	} else {
 //		log.Printf("wrong type of payload")

@@ -2,13 +2,13 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/database"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/hash"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/jwt"
 	"github.com/jenkinsyoung/web_music_sanctuary/internal/models"
 	"log"
 	"net/http"
-	"time"
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
@@ -44,6 +44,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 }
 
 func Authorization(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("запросик на вход")
 	user := models.User{}
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		log.Printf("Error parsing json: %s", err)
@@ -67,15 +68,15 @@ func Authorization(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cookie := &http.Cookie{
-		Name:     "jwt",
-		Value:    token,
-		Expires:  time.Now().Add(time.Hour * 24 * 7),
-		HttpOnly: true,
-		Secure:   true,
-	}
-
-	http.SetCookie(w, cookie)
+	//cookie := &http.Cookie{
+	//	Name:     "jwt",
+	//	Value:    token,
+	//	Expires:  time.Now().Add(time.Hour * 24 * 7),
+	//	HttpOnly: true,
+	//	Secure:   true,
+	//}
+	//
+	//http.SetCookie(w, cookie)
 
 	resp, err := json.Marshal(TokenResponse{AccessToken: token})
 	if err != nil {
@@ -90,13 +91,13 @@ func Authorization(w http.ResponseWriter, r *http.Request) {
 }
 
 func Logout(w http.ResponseWriter, r *http.Request) {
-	http.SetCookie(w, &http.Cookie{
-		Name:     "jwt",
-		Value:    "",
-		Expires:  time.Now().Add(time.Hour * 24 * 7),
-		HttpOnly: true,
-		Secure:   true,
-	})
+	//http.SetCookie(w, &http.Cookie{
+	//	Name:     "jwt",
+	//	Value:    "",
+	//	Expires:  time.Now().Add(time.Hour * 24 * 7),
+	//	HttpOnly: true,
+	//	Secure:   true,
+	//})
 
 	w.WriteHeader(http.StatusOK)
 }

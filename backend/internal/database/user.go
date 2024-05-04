@@ -88,12 +88,14 @@ func (c *DBConnection) GetUserListings(userID int64) ([]models.ListingFullInfo, 
 	return listings, nil
 }
 
-//func (c *DBConnection) IsUsersListing(userID, listingID int64) error {
-//
-//}
-//
 //func (c *DBConnection) UpdateListing(userID int64, listing models.Listing) error {
-//
+//	err := c.db.QueryRow(`UPDATE "listing" SET
+//                  name=$1, cost=$2, description=$3 WHERE id=$4 AND user_id=$5`,
+//		listing.GuitarName, listing.Cost, listing.Description, listing.Id, userID)
+//	if err != nil {
+//		return errors.New("could not update user with this id")
+//	}
+//	return nil
 //}
 
 func (c *DBConnection) UpdateUserInfo(user models.User) error {

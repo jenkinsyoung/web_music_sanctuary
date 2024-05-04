@@ -1,7 +1,7 @@
 package models
 
 type Listing struct {
-	Id          int64  `json:"advertisement_id"`
+	Id          int64  `json:"listing_id"`
 	UserId      int64  `json:"user_id"`
 	GuitarId    int64  `json:"guitar_id"`
 	GuitarName  string `json:"guitar_name"`
@@ -12,7 +12,7 @@ type Listing struct {
 }
 
 type ListingFullInfo struct {
-	Id     int64 `json:"advertisement_id"`
+	Id     int64 `json:"listing_id"`
 	UserId int64 `json:"user_id"`
 
 	GuitarId     int64  `json:"guitar_id"`

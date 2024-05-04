@@ -18,14 +18,28 @@ import (
 //	return adID, nil
 //}
 
-func (c *DBConnection) GetListingByID(id int64) (models.Listing, error) {
-	var listing models.Listing
+func (c *DBConnection) GetListingByID(id int64) (models.ListingFullInfo, error) {
+	var listing models.ListingFullInfo
 	if err := c.db.QueryRow(`SELECT * FROM "listing" WHERE id=$1`, id).Scan(&listing.Id, &listing.UserId,
-		&listing.GuitarId, &listing.GuitarName, &listing.Cost, listing.Description); err != nil {
+		&listing.GuitarId, &listing.GuitarName, &listing.Cost, &listing.Description); err != nil {
 		if err == sql.ErrNoRows {
 			return listing, errors.New("advertisement with this id does not exist")
 		}
 		return listing, errors.New("error getting advertisement using id")
+	}
+
+	guitarInfo, err := c.GetGuitarInfo(listing.GuitarId)
+	if err != nil {
+		return listing, err
+	}
+
+	listing.Form = guitarInfo.Form
+	listing.PickupConfig = guitarInfo.PickupConfig
+	listing.Category = guitarInfo.Category
+
+	listing.ImgList, err = c.GetListingImages(listing.Id)
+	if err != nil {
+		return listing, err
 	}
 
 	return listing, nil
@@ -135,3 +149,23 @@ func (c *DBConnection) ImageListingCompound(listingID, imgID int64) {
 	fmt.Println(imgID)
 	c.db.QueryRow(`INSERT INTO "listing_pictures" (listing_id, picture_id) VALUES ($1, $2)`, listingID, imgID)
 }
+
+func (c *DBConnection) UpdateListing(listing models.ListingFullInfo, userID int64) error {
+	err := c.db.QueryRow(`UPDATE "listing" SET
+	                 name=$1, cost=$2, description=$3 WHERE id=$4 AND user_id=$5`,
+		listing.GuitarName, listing.Cost, listing.Description, listing.Id, userID)
+	if err != nil {
+		return errors.New("could not update user with this id")
+	}
+
+	err = c.db.QueryRow(`UPDATE "guitar" SET form=$1, pickup_config=$2 WHERE id=$3`,
+		listing.Form, listing.PickupConfig, listing.GuitarId)
+
+	if err != nil {
+		return errors.New("could not update guitar with this id")
+	}
+
+	return nil
+}
+
+//TODO: delete listing
